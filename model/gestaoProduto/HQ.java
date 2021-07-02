@@ -1,27 +1,12 @@
 package model.gestaoProduto;
 
-public class HQ extends Livraria{
-    private String Autor;
+public class HQ extends Autoria {
 
-    public HQ() {
-    }
-
-    public HQ(String autor) {
-        Autor = autor;
-    }
-
-    public HQ(String nome, double preco, int qtdEmEstoque, String iSBN, String editora, int anoPublicacao,
-            String genero) {
-        super(nome, preco, qtdEmEstoque, iSBN, editora, anoPublicacao, genero);
-    }
-
- 
-    public String getAutor() {
-        return Autor;
-    }
-
-    public void setAutor(String autor) {
-        this.Autor = autor;
+    public HQ() {}
+    
+    public HQ(String nome, double preco, int qtdEmEstoque, String codigo, String iSBN, String editora,
+            int anoPublicacao, String genero, String autor) {
+        super(nome, preco, qtdEmEstoque, codigo, iSBN, editora, anoPublicacao, genero, autor);
     }
 
 }

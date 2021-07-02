@@ -1,19 +1,16 @@
 package model.gestaoProduto;
 
-public class Livraria extends Produto{
+public class Livraria extends Produto {
     private String ISBN;
     private String editora;
     private int anoPublicacao;
     private String genero;
     private String tipo;
     
-    public Livraria(){
-
-    }
-
-    public Livraria(String nome, double preco, int qtdEmEstoque, String iSBN, String editora, int anoPublicacao,
-            String genero) {
-        super(nome, preco, qtdEmEstoque);
+    public Livraria() {}
+    
+    public Livraria(String nome, double preco, int qtdEmEstoque, String codigo, String iSBN, String editora, int anoPublicacao, String genero) {
+        super(nome, preco, qtdEmEstoque, codigo);
         ISBN = iSBN;
         this.editora = editora;
         this.anoPublicacao = anoPublicacao;
