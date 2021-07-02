@@ -30,10 +30,10 @@ IDEs: Netbeans, Eclipse, VSCode
 Padrão de projeto: Modelo-Visão-Controle (MVC)  
 
 ### UML do Escopo
-<img src="images/UML_ESCOPO.png">
+<img src="images/GESTAO_PRODUTOS.png">
 
 ### UML das Regras de Negócio
-<img src="images/UML_REGRA_DE_NEGOCIO.png">
+<img src="images/GESTAO_NEGOCIOS.png">
 
 ### Distribuição de tarefas:
 #### Semana 1 (20/06 - 26/06)
