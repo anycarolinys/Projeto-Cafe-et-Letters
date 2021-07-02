@@ -8,10 +8,6 @@ public class Venda {
     private Calendar data;
     private int hora;
 
-    public Venda(){
-
-    }
-
     public Venda(double valorTotal, double valorPago, double troco, Calendar data, int hora) {
         this.valorTotal = valorTotal;
         this.valorPago = valorPago;
