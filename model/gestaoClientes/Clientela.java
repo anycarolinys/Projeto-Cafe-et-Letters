@@ -1,27 +1,25 @@
 package model.gestaoClientes;
 
-import model.gestaoVendas.Compra;
+import java.util.List;
 
-public class Clientela extends Cliente{
-    private Cliente[] cliente;
+import control.*;
+
+import java.util.ArrayList;
+
+
+public class Clientela implements Arquivos {
+    private List<Cliente> clientes;
 
     public Clientela() {
+        this.clientes = new ArrayList<>();
     }
 
-    public Clientela(String nome, String cPF, Compra[] compra) {
-        super(nome, cPF, compra);
+    public List<Cliente> getClientes() {
+        return clientes;
     }
 
-    public Clientela(Cliente[] cliente) {
-        this.cliente = cliente;
-    }
-
-    public Cliente[] getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente[] cliente) {
-        this.cliente = cliente;
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
     }
 
     public int cadastrarCliente(){
@@ -32,7 +30,7 @@ public class Clientela extends Cliente{
         return 1;
     }
 
-    public void listarClientes(){
+    public void listarClientesAtivos(){
 
     }
 
