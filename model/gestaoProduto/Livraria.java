@@ -9,8 +9,8 @@ public class Livraria extends Produto {
     
     public Livraria() {}
     
-    public Livraria(String nome, double preco, int qtdEmEstoque, String codigo, String iSBN, String editora, int anoPublicacao, String genero) {
-        super(nome, preco, qtdEmEstoque, codigo);
+    public Livraria(String codigo, String nome, double preco, int qtdEmEstoque, String iSBN, String editora, int anoPublicacao, String genero) {
+        super(codigo, nome, preco, qtdEmEstoque);
         ISBN = iSBN;
         this.editora = editora;
         this.anoPublicacao = anoPublicacao;
@@ -55,6 +55,12 @@ public class Livraria extends Produto {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    @Override
+    public String toString() {
+        return "Livraria [ISBN=" + ISBN + ", anoPublicacao=" + anoPublicacao + ", editora=" + editora + ", genero="
+                + genero + ", tipo=" + tipo + "]";
     }
 
 }

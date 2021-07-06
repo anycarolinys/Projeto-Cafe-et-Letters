@@ -1,14 +1,15 @@
 package model.gestaoProduto;
 
-import java.util.Date;
-
 public class Bebida extends Alimentos {
     private String tipoBebida;
 
-    public Bebida() {}
+    public Bebida() {
+        
+    }
 
-    public Bebida(String nome, double preco, int qtdEmEstoque, String codigo, Date validade, String tipoBebida) {
-        super(nome, preco, qtdEmEstoque, codigo, validade);
+    public Bebida(String codigo, String nome, double preco, int qtdEmEstoque, int mesValidade, int anoValidade,
+            String tipoBebida) {
+        super(codigo, nome, preco, qtdEmEstoque, mesValidade, anoValidade);
         this.tipoBebida = tipoBebida;
     }
 
@@ -20,4 +21,14 @@ public class Bebida extends Alimentos {
         this.tipoBebida = tipoBebida;
     }
 
+    
+    @Override
+    public String toString() {
+        return getCodigo() + "\n" +
+                getNome() + "\n" +
+                getPreco() + "\n" +
+                getQtdEmEstoque() + "\n" +
+                getValidade() + "\n" +
+                getTipoBebida() + "\n";
+    }
 }

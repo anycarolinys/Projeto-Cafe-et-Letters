@@ -1,18 +1,18 @@
 package model.gestaoProduto;
 
 public abstract class Produto {
+    private String codigo;
     private String nome;
     private double preco;
     private int qtdEmEstoque;
-    private String codigo;
 
     public Produto() {}
 
-    public Produto(String nome, double preco, int qtdEmEstoque, String codigo) {
+    public Produto(String codigo, String nome, double preco, int qtdEmEstoque) {
+        this.codigo = codigo;
         this.nome = nome;
         this.preco = preco;
         this.qtdEmEstoque = qtdEmEstoque;
-        this.codigo = codigo;
     }
 
     public String getNome() {
@@ -47,4 +47,10 @@ public abstract class Produto {
         this.codigo = codigo;
     }
 
+    @Override
+    public String toString() {
+        return "Produto [codigo=" + codigo + ", nome=" + nome + ", preco=" + preco + ", qtdEmEstoque=" + qtdEmEstoque
+                + "]";
+    }
+    
 }

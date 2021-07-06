@@ -1,23 +1,30 @@
 package model.gestaoProduto;
 
-import java.util.Date;
 
 public class Alimentos extends Produto {
-    private Date validade;
+    private Validade validade;
 
-    public Alimentos() {}
+    public Alimentos() {
+        this.validade = new Validade();
+    }
     
-    public Alimentos(String nome, double preco, int qtdEmEstoque, String codigo, Date validade) {
-        super(nome, preco, qtdEmEstoque, codigo);
-        this.validade = validade;
+    public Alimentos(String codigo, String nome, double preco, int qtdEmEstoque, int mesValidade, int anoValidade) {
+        super(codigo, nome, preco, qtdEmEstoque);
+        this.validade = new Validade(mesValidade, anoValidade);
     }
 
-    public Date getValidade() {
-        return validade;
+    public String getValidade() {
+        return validade.getMes() + "/" + validade.getAno();
     }
 
-    public void setValidade(Date validade) {
-        this.validade = validade;
+    public void setValidade(int mes, int ano) {
+        this.validade.setMes(mes);
+        this.validade.setAno(ano);
+    }
+
+    @Override
+    public String toString() {
+        return "Alimentos [validade=" + validade + "]";
     }
 
 }
