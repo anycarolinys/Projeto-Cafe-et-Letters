@@ -5,37 +5,37 @@ import model.gestaoProduto.*;
 
 import java.util.List;
 
-public interface Arquivos {
+public interface ArquivosProdutos {
 
     public void instanciaProduto(String caminhoArquivo);
 
-    public default void findAllFilesInFolder(File folder) {
-        for (File file : folder.listFiles()) {
-            if (!file.isDirectory()) {
-                System.out.println(file.getName());
+    public default void percorrerArquivosEmPasta(File pasta) {
+        for (File arquivo : pasta.listFiles()) {
+            if (!arquivo.isDirectory()) {
+                System.out.println(arquivo.getName());
             } else {
-                findAllFilesInFolder(file);
+                percorrerArquivosEmPasta(arquivo);
             }
         }
     }
 
-    public default void findAllFilesInFolder(File folder, List<String> arquivosDeProdutos) {
-        // for (File file : folder.listFiles()) {
-        // if (!file.isDirectory()) {
-        // System.out.println(file.getName());
-        // arquivosDeProdutos.add(file.getName());
-        // } else {
-        // findAllFilesInFolder(file);
-        // }
-        // }
+    public default void percorrerArquivosEmPasta(File pasta, List<String> arquivosDeProdutos) {
+        /* for (File arquivo : pasta.listFiles()) {
+        if (!arquivo.isDirectory()) {
+        System.out.println(arquivo.getName());
+        arquivosDeProdutos.add(arquivo.getName());
+        } else {
+        percorrerArquivosEmPasta(file);
+        }
+        } */
 
-        File[] file = folder.listFiles();
+        File[] arquivo = pasta.listFiles();
 
-        for (int i = 0; i < folder.listFiles().length; i++) {
-            if (!file[i].isDirectory()) {
-                arquivosDeProdutos.add(file[i].getName());
+        for (int i = 0; i < pasta.listFiles().length; i++) {
+            if (!arquivo[i].isDirectory()) {
+                arquivosDeProdutos.add(arquivo[i].getName());
             } else {
-                findAllFilesInFolder(file[i]);
+                percorrerArquivosEmPasta(arquivo[i]);
             }
         }
     }
@@ -77,7 +77,9 @@ public interface Arquivos {
         }
     }
 
-    public default void instanciaLivro(Livro livro, String caminhoArquivo) {
+    public default Livro instanciaLivro(String caminhoArquivo) {
+        
+        Livro livro = new Livro();
 
         try (
 
@@ -114,9 +116,14 @@ public interface Arquivos {
         // System.out.println(livro.getAnoPublicacao());
         // System.out.println(livro.getGenero());
         // System.out.println(livro.getAutor());
+
+        return livro;
     }
 
-    public default void instanciaHQ(HQ hq, String caminhoArquivo) {
+    public default HQ instanciaHQ(String caminhoArquivo) {
+
+        HQ hq = new HQ();
+
         try (FileReader acessoArquivo = new FileReader(caminhoArquivo);
                 BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
 
@@ -150,9 +157,13 @@ public interface Arquivos {
         // System.out.println(hq.getAnoPublicacao());
         // System.out.println(hq.getGenero());
         // System.out.println(hq.getAutor());
+
+        return hq;
     }
 
-    public default void instanciaRevista(Revista revista, String caminhoArquivo) {
+    public default Revista instanciaRevista(String caminhoArquivo) {
+        Revista revista = new Revista();
+
         try (FileReader acessoArquivo = new FileReader(caminhoArquivo);
                 BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
 
@@ -185,10 +196,12 @@ public interface Arquivos {
         // System.out.println(revista.getAnoPublicacao());
         // System.out.println(revista.getGenero());
         // System.out.println(revista.getMarca());
-
+        return revista;
     }
 
-    public default void instanciaBebida(Bebida bebida, String caminhoArquivo) {
+    public default Bebida instanciaBebida(String caminhoArquivo) {
+
+        Bebida bebida = new Bebida();
 
         try (FileReader acessoArquivo = new FileReader(caminhoArquivo);
                 BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);) {
@@ -224,10 +237,14 @@ public interface Arquivos {
         // System.out.println(bebida.getQtdEmEstoque());
         // System.out.println(bebida.getValidade());
         // System.out.println(bebida.getTipoBebida());
-
+        
+        return bebida;
     }
 
-    public default void instanciaAcompanhamento(Acompanhamento acompanhamento, String caminhoArquivo) {
+    public default Acompanhamento instanciaAcompanhamento(String caminhoArquivo) {
+        
+        Acompanhamento acompanhamento = new Acompanhamento();
+
         try (FileReader acessoArquivo = new FileReader(caminhoArquivo);
                 BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);) {
             leitorArquivo.readLine();
@@ -262,5 +279,57 @@ public interface Arquivos {
         // System.out.println(acompanhamento.getQtdEmEstoque());
         // System.out.println(acompanhamento.getValidade());
         // System.out.println(acompanhamento.getTipoAcompanhamento());
+
+        return acompanhamento;
     }
+    
+    /* public void instanciaProduto(String caminhoArquivo) {
+        
+        Livraria produtoLivraria;
+        Alimentos produtoAlimentos;
+
+        try (
+
+            FileReader acessoArquivo = new FileReader(caminhoArquivo);
+            BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
+            
+        ) {
+            String conteudo = "";
+                // Lendo o tipo de produto a ser instanciado
+                conteudo = leitorArquivo.readLine();
+
+                switch (conteudo.toLowerCase()) {
+                    case "livro":
+                        produtoLivraria = new Livro();
+                        instanciaLivro((Livro) produtoLivraria, caminhoArquivo);
+                        setProdutos(produtoLivraria);
+                        break;
+                    case "hq":
+                        produtoLivraria= new HQ();
+                        instanciaHQ((HQ) produtoLivraria, caminhoArquivo);
+                        setProdutos(produtoLivraria);
+                        break;
+                    case "revista":
+                        produtoLivraria= new Revista();
+                        instanciaRevista((Revista) produtoLivraria, caminhoArquivo);
+                        setProdutos(produtoLivraria);
+                        break;
+                    case "bebida":
+                        produtoAlimentos = new Bebida();
+                        instanciaBebida((Bebida) produtoAlimentos, caminhoArquivo);
+                        setProdutos(produtoAlimentos);
+                        break;
+                    case "acompanhamento":
+                        produtoAlimentos = new Acompanhamento();
+                        instanciaAcompanhamento((Acompanhamento) produtoAlimentos, caminhoArquivo);
+                        setProdutos(produtoAlimentos);
+                        break;
+                    default:
+                        break;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    } */
 }
