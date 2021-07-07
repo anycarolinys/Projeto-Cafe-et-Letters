@@ -1,12 +1,13 @@
 package model.gestaoVendas;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import control.*;
 import model.gestaoProduto.*;
+import java.io.*;
 
-public class Estoque implements Arquivos {
+public class Estoque implements ArquivosProdutos {
+
     Set<Produto> produtos;
 
     public Estoque() {
@@ -17,32 +18,77 @@ public class Estoque implements Arquivos {
         return produtos;
     }
 
-    public void setProdutos(Set<Produto> produtos) {
-        this.produtos = produtos;
+    public void setProdutos(Produto produto) {
+        this.produtos.add(produto);
     }
 
-    // A String passada pode ser a leitura de botão no Swing
+    public void inicializarProdutos(String caminhoArquivo) {
+        instanciaProduto(caminhoArquivo);
+    }
+
+    // O parâmetro pode ser a leitura de um botão
     public void cadastrarProduto(String tipoProduto) {
 
     }
 
-    public void instanciarProduto(Produto produto) {
-
+    public void listarProdutos() {
+        for (Produto produto : produtos) {
+            System.out.println(produto.toString());
+        }
     }
 
-    public void excluirProduto() {};
-    public void listarProdutosCadastrados() {
-    };
+    public void instanciaProduto(String caminhoArquivo) {
+        
+        Livraria produtoLivraria;
+        Alimentos produtoAlimentos;
 
-    public void listarProdutosDisponiveis() {
-    };
+        try (
 
-    public void listarProdutosCategorias() {
-    };
+            FileReader acessoArquivo = new FileReader(caminhoArquivo);
+            BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
+            
+        ) {
+            String conteudo = "";
+                // Lendo o tipo de produto a ser instanciado
+                conteudo = leitorArquivo.readLine();
 
-    public void listarProdutosExcuidos() {
-    };
+                switch (conteudo.toLowerCase()) {
+                    case "livro":
+                        produtoLivraria = instanciaLivro(caminhoArquivo);
+                        setProdutos(produtoLivraria);
+                        break;
+                    case "hq":
+                        produtoLivraria = instanciaHQ(caminhoArquivo);
+                        setProdutos(produtoLivraria);
+                        break;
+                    case "revista":
+                        produtoLivraria = instanciaRevista(caminhoArquivo);
+                        setProdutos(produtoLivraria);
+                        break;
+                    case "bebida":
+                        produtoAlimentos = instanciaBebida(caminhoArquivo);
+                        setProdutos(produtoAlimentos);
+                        break;
+                    case "acompanhamento":
+                        produtoAlimentos = instanciaAcompanhamento(caminhoArquivo);
+                        setProdutos(produtoAlimentos);
+                        break;
+                    default:
+                        break;
+            }
 
-    public void listarProdutosForaDeEstoque() {
-    };
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // public void listarProdutosDisponiveis() {}
+
+    // public void listarProdutosCategorias() {}
+
+    // public void listarProdutosExcuidos() {}
+
+    // public void listarProdutosForaDeEstoque() {}
+
+    // public void excluirProduto() {}
 }
