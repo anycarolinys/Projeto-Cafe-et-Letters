@@ -1,6 +1,9 @@
 package model.gestaoClientes;
 
 import java.util.List;
+
+import control.ArquivosClientes;
+
 import java.io.*;
 import java.util.ArrayList;
 
