@@ -1,8 +1,6 @@
 package model.gestaoVendas;
 
-import java.util.Set;
-import java.util.TreeSet;
-
+import java.util.*;
 
 public class ConjuntoVendas {
     private Set<Venda> vendas;
@@ -15,9 +13,10 @@ public class ConjuntoVendas {
         return vendas;
     }
 
-    public void setVendas(Set<Venda> vendas) {
-        this.vendas = vendas;
+    public void setVendas(Venda venda) {
+        this.vendas.add(venda);
     }
+
     public void listarVendas(){}
     
 }

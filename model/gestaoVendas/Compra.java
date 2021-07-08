@@ -7,7 +7,17 @@ import model.gestaoProduto.Produto;
 public class Compra extends Venda {
     private Produto produto;
 
-    public Compra(double valorTotal, double valorPago, double troco, Calendar data, int hora, Produto produto) {
+    public Compra() {
+    }
+
+    public Compra(
+        double valorTotal, 
+        double valorPago, 
+        double troco, 
+        Calendar data, 
+        int hora, 
+        Produto produto) {
+
         super(valorTotal, valorPago, troco, data, hora);
         this.produto = produto;
     }
@@ -20,11 +30,9 @@ public class Compra extends Venda {
         this.produto = produto;
     }
 
-    public double pagar(double valor) {
-        return valor;
+    public void pagar(double valor) {
+        setValorPago(valor);
     }
 
-    public int cadastrarVenda() {
-        return 1;
-    }
+    public void cadastrarCompra() {}
 }
