@@ -1,21 +1,19 @@
 package model.gestaoClientes;
 
 import java.util.List;
-
-import control.*;
-
 import java.util.ArrayList;
+import model.gestaoVendas.*;
 
-import model.gestaoVendas.Compra;
-
-public class Cliente implements Arquivos {
-    private String nome;
+public class Cliente {
     private String CPF;
+    private String nome;
     private List<Compra> compras;
 
-    public Cliente(String nome, String cPF) {
+    public Cliente() {}
+
+    public Cliente(String CPF, String nome) {
+        this.CPF = CPF;
         this.nome = nome;
-        CPF = cPF;
         this.compras = new ArrayList<>();
     }
 
@@ -39,8 +37,8 @@ public class Cliente implements Arquivos {
         return compras;
     }
 
-    public void setCompras(List<Compra> compras) {
-        this.compras = compras;
+    public void setCompras(Compra compra) {
+        this.compras.add(compra);
     }
 
     public void aplicarPromocao() {
