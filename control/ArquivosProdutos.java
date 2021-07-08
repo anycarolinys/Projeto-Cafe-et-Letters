@@ -3,6 +3,7 @@ package control;
 import java.io.*;
 import model.gestaoProduto.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ArquivosProdutos {
@@ -282,7 +283,42 @@ public interface ArquivosProdutos {
 
         return acompanhamento;
     }
-    
+
+
+
+    public default void deletarArquivo(File caminhoDiretorio, String codigo) throws FileNotFoundException {
+
+        // ArrayList pra guardar todos os arquivos do diretorio
+        List<String> listaArquivos = new ArrayList<>(); 
+        // Função que armazena o nome dos arquivos em ArrayList
+        percorrerArquivosEmPasta(caminhoDiretorio, listaArquivos); 
+
+        for (String caminhoArquivo : listaArquivos) {
+            File arquivo = new File(caminhoDiretorio + "\\" + caminhoArquivo);
+
+            try  {
+                FileReader leitor = new FileReader(arquivo); 
+                BufferedReader buffer = new BufferedReader(leitor);
+                // A primeira linha deve ser ignorada
+                buffer.readLine();
+                // A segunda linha corresponde ao codigo
+                String codigoAtual = buffer.readLine();
+                // Se o codigo for igual, o arquivo deve ser deletado
+                if (codigoAtual.equals(codigo)) {
+                    System.out.println(codigoAtual);
+                    boolean b = arquivo.delete();  
+                    System.out.println(b);
+                }
+                buffer.close();
+                leitor.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+
     /* public void instanciaProduto(String caminhoArquivo) {
         
         Livraria produtoLivraria;
@@ -332,4 +368,3 @@ public interface ArquivosProdutos {
             e.printStackTrace();
         }
     } */
-}
