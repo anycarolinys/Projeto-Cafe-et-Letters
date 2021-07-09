@@ -1,25 +1,39 @@
 package control;
 
 import java.io.*;
-import model.gestaoProduto.*;
-
 import java.util.List;
+
+import model.gestaoProdutos.*;
 
 public interface ArquivosProdutos {
 
-    public void instanciarProduto(String caminhoArquivo);
+    public File procurarArquivoProduto(File caminhoDiretorio, String codigo) throws FileNotFoundException;
 
-    public void deletarProduto(File caminhoDiretorio, String codigo) throws FileNotFoundException;
+    public boolean excluirProdutoArquivo(File caminhoArquivo);
 
-    public Livro instanciarLivro(String caminhoArquivo);
+    public void instanciarProdutoArquivo(String caminhoArquivo);
 
-    public HQ instanciarHQ(String caminhoArquivo);
+    public Livro instanciarLivroArquivo(String caminhoArquivo);
 
-    public Revista instanciarRevista(String caminhoArquivo);
+    public HQ instanciarHQArquivo(String caminhoArquivo);
 
-    public Bebida instanciarBebida(String caminhoArquivo);
+    public Revista instanciarRevistaArquivo(String caminhoArquivo);
 
-    public Acompanhamento instanciarAcompanhamento(String caminhoArquivo); 
+    public Bebida instanciarBebidaArquivo(String caminhoArquivo);
+
+    public Acompanhamento instanciarAcompanhamentoArquivo(String caminhoArquivo); 
+
+    public void instanciarProdutoObjeto(Produto produto);
+
+    public void instanciarLivroObjeto(Livro livro);
+
+    public void instanciarHQObjeto(HQ hq);
+
+    public void instanciarRevistaObjeto(Revista revista);
+
+    public void instanciarBebidaObjeto(Bebida bebida);
+
+    public void instanciarAcompanhamentoObjeto(Acompanhamento acompanhamento); 
 
 
     public default void percorrerArquivosEmPasta(File pasta) {
