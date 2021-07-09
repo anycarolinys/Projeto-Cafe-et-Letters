@@ -1,11 +1,19 @@
 package model.gestaoVendas;
 
+// import java.io.BufferedWriter;
+// import java.io.File;
+// import java.io.FileWriter;
+// import java.io.IOException;
+// import java.util.ArrayList;
+// import java.util.List;
 import java.util.Calendar;
 
-import model.gestaoProduto.Produto;
+import control.ArquivosCompras;
+import model.gestaoProdutos.Produto;
 
-public class Compra extends Venda {
+public class Compra extends Venda implements ArquivosCompras{
     private Produto produto;
+    private int quantidadeProduto;
 
     public Compra() {
     }
@@ -15,11 +23,13 @@ public class Compra extends Venda {
         double valorPago, 
         double troco, 
         Calendar data, 
-        int hora, 
-        Produto produto) {
+        Produto produto, int quantidadeProduto) {
 
-        super(valorTotal, valorPago, troco, data, hora);
+        super(valorTotal, valorPago, troco, data);
+        // Compra não instancia produto, pois só é 
+        // possível comprar o que se tem no estoque
         this.produto = produto;
+        this.quantidadeProduto = quantidadeProduto;
     }
 
     public Produto getProduto() {
@@ -30,9 +40,11 @@ public class Compra extends Venda {
         this.produto = produto;
     }
 
-    public void pagar(double valor) {
-        setValorPago(valor);
+    public int getQuantidadeProduto() {
+        return quantidadeProduto;
     }
 
-    public void cadastrarCompra() {}
+    public void setQuantidadeProduto(int quantidadeProduto) {
+        this.quantidadeProduto = quantidadeProduto;
+    }
 }

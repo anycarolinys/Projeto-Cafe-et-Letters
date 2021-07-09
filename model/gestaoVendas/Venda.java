@@ -6,14 +6,16 @@ public class Venda {
     private double valorPago;
     private double troco;
     private Calendar data;
-    private int hora;
 
-    public Venda(double valorTotal, double valorPago, double troco, Calendar data, int hora) {
+    public Venda(){
+
+    }
+
+    public Venda(double valorTotal, double valorPago, double troco, Calendar data) {
         this.valorTotal = valorTotal;
         this.valorPago = valorPago;
         this.troco = troco;
         this.data = data;
-        this.hora = hora;
     }
 
     public double getValorTotal() {
@@ -30,14 +32,6 @@ public class Venda {
 
     public void setValorPago(double valorPago) {
         this.valorPago = valorPago;
-    }
-
-    public int getHora() {
-        return hora;
-    }
-
-    public void setHora(int hora) {
-        this.hora = hora;
     }
 
     public Calendar getData() {

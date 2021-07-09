@@ -3,7 +3,8 @@ package model.gestaoVendas;
 import java.util.*;
 
 import control.*;
-import model.gestaoProduto.*;
+import model.gestaoProdutos.*;
+
 import java.io.*;
 
 public class Estoque implements ArquivosProdutos {
@@ -23,7 +24,7 @@ public class Estoque implements ArquivosProdutos {
     }
 
     public void inicializarProdutos(String caminhoArquivo) {
-        instanciarProduto(caminhoArquivo);
+        instanciarProdutoArquivo(caminhoArquivo);
     }
 
     public void listarProdutos() {
@@ -32,7 +33,7 @@ public class Estoque implements ArquivosProdutos {
         }
     }
 
-    public void instanciarProduto(String caminhoArquivo) {
+    public void instanciarProdutoArquivo(String caminhoArquivo) {
         
         Livraria produtoLivraria;
         Alimentos produtoAlimentos;
@@ -49,23 +50,23 @@ public class Estoque implements ArquivosProdutos {
 
                 switch (conteudo.toLowerCase()) {
                     case "livro":
-                        produtoLivraria = instanciarLivro(caminhoArquivo);
+                        produtoLivraria = instanciarLivroArquivo(caminhoArquivo);
                         setProdutos(produtoLivraria);
                         break;
                     case "hq":
-                        produtoLivraria = instanciarHQ(caminhoArquivo);
+                        produtoLivraria = instanciarHQArquivo(caminhoArquivo);
                         setProdutos(produtoLivraria);
                         break;
                     case "revista":
-                        produtoLivraria = instanciarRevista(caminhoArquivo);
+                        produtoLivraria = instanciarRevistaArquivo(caminhoArquivo);
                         setProdutos(produtoLivraria);
                         break;
                     case "bebida":
-                        produtoAlimentos = instanciarBebida(caminhoArquivo);
+                        produtoAlimentos = instanciarBebidaArquivo(caminhoArquivo);
                         setProdutos(produtoAlimentos);
                         break;
                     case "acompanhamento":
-                        produtoAlimentos = instanciarAcompanhamento(caminhoArquivo);
+                        produtoAlimentos = instanciarAcompanhamentoArquivo(caminhoArquivo);
                         setProdutos(produtoAlimentos);
                         break;
                     default:
@@ -77,38 +78,36 @@ public class Estoque implements ArquivosProdutos {
         }
     }
 
-    public void deletarProduto(File caminhoDiretorio, String codigo) throws FileNotFoundException {
+    public File procurarArquivoProduto(File caminhoDiretorio, String codigo) throws FileNotFoundException {
 
-        // ArrayList pra guardar todos os arquivos do diretorio
-        List<String> listaArquivos = new ArrayList<>(); 
-        // Função que armazena o nome dos arquivos em ArrayList
-        percorrerArquivosEmPasta(caminhoDiretorio, listaArquivos); 
+        List<String> arquivosProdutos = new ArrayList<>();
+        percorrerArquivosEmPasta(caminhoDiretorio, arquivosProdutos);
 
-        for (String caminhoArquivo : listaArquivos) {
-            File arquivo = new File(caminhoDiretorio + "\\" + caminhoArquivo);
+        File arquivo = new File("");
 
-            try  {
-                FileReader leitor = new FileReader(arquivo); 
+        for (String caminhoArquivo : arquivosProdutos) {
+            arquivo = new File(caminhoDiretorio + "\\" + caminhoArquivo);
+
+            try (
+                FileReader leitor = new FileReader(arquivo);
                 BufferedReader buffer = new BufferedReader(leitor);
-                // A primeira linha deve ser ignorada
+            ) {
                 buffer.readLine();
-                // A segunda linha corresponde ao codigo
-                String codigoAtual = buffer.readLine();
-                // Se o codigo for igual, o arquivo deve ser deletado
-                if (codigoAtual.equals(codigo)) {
-                    System.out.println(codigoAtual);
-                    boolean b = arquivo.delete();  
-                    System.out.println(b);
-                }
-                buffer.close();
-                leitor.close();
+                if(buffer.readLine().equals(codigo)) 
+                    break;
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
+        return arquivo;
     }
 
-    public Livro instanciarLivro(String caminhoArquivo) {
+    public boolean excluirProdutoArquivo(File caminhoArquivo) {
+        return caminhoArquivo.delete();
+    }
+
+    public Livro instanciarLivroArquivo(String caminhoArquivo) {
         
         Livro livro = new Livro();
 
@@ -141,7 +140,7 @@ public class Estoque implements ArquivosProdutos {
         return livro;
     }
 
-    public HQ instanciarHQ(String caminhoArquivo) {
+    public HQ instanciarHQArquivo(String caminhoArquivo) {
 
         HQ hq = new HQ();
 
@@ -171,7 +170,7 @@ public class Estoque implements ArquivosProdutos {
         return hq;
     }
 
-    public Revista instanciarRevista(String caminhoArquivo) {
+    public Revista instanciarRevistaArquivo(String caminhoArquivo) {
         Revista revista = new Revista();
 
         try (FileReader acessoArquivo = new FileReader(caminhoArquivo);
@@ -199,7 +198,7 @@ public class Estoque implements ArquivosProdutos {
         return revista;
     }
 
-    public Bebida instanciarBebida(String caminhoArquivo) {
+    public Bebida instanciarBebidaArquivo(String caminhoArquivo) {
 
         Bebida bebida = new Bebida();
 
@@ -233,7 +232,7 @@ public class Estoque implements ArquivosProdutos {
         return bebida;
     }
 
-    public Acompanhamento instanciarAcompanhamento(String caminhoArquivo) {
+    public Acompanhamento instanciarAcompanhamentoArquivo(String caminhoArquivo) {
         
         Acompanhamento acompanhamento = new Acompanhamento();
 
@@ -267,13 +266,160 @@ public class Estoque implements ArquivosProdutos {
         return acompanhamento;
     }
     
-    // public void listarProdutosDisponiveis() {}
+    public void instanciarLivroObjeto(Livro livro) {
+        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
 
-    // public void listarProdutosCategorias() {}
+        String caminhoArquivo = Integer.toString(livro.hashCode());
 
-    // public void listarProdutosExcuidos() {}
+        try (
+            FileWriter acessoArquivo = new FileWriter(new File(diretorioProdutos.getPath() + "/" + caminhoArquivo + ".txt"));
+            PrintWriter printer = new PrintWriter(acessoArquivo);
+        ) {
 
-    // public void listarProdutosForaDeEstoque() {}
+            printer.println("LIVRO");
+            printer.println(livro.getCodigo());
+            printer.println(livro.getNome());
+            printer.println(Double.toString(livro.getPreco()));
+            printer.println(Integer.toString(livro.getQtdEmEstoque()));
+            printer.println(livro.getISBN());
+            printer.println(livro.getEditora());
+            printer.println(Integer.toString(livro.getAnoPublicacao()));
+            printer.println(livro.getGenero());
+            printer.print(livro.getAutor());
 
-    // public void excluirProduto() {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void instanciarHQObjeto(HQ hq) {
+        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+
+        String caminhoArquivo = Integer.toString(hq.hashCode());
+
+        try (
+            FileWriter acessoArquivo = new FileWriter(new File(diretorioProdutos.getPath() + "/"+ caminhoArquivo + ".txt"));
+            PrintWriter printer = new PrintWriter(acessoArquivo);
+        ) {
+            
+            printer.println("HQ");
+            printer.println(hq.getCodigo());
+            printer.println(hq.getNome());
+            printer.println(Double.toString(hq.getPreco()));
+            printer.println(Integer.toString(hq.getQtdEmEstoque()));
+            printer.println(hq.getISBN());
+            printer.println(hq.getEditora());
+            printer.println(Integer.toString(hq.getAnoPublicacao()));
+            printer.println(hq.getGenero());
+            printer.print(hq.getAutor());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void instanciarRevistaObjeto(Revista revista) {
+        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+
+        String caminhoArquivo = Integer.toString(revista.hashCode());
+
+        try (
+            FileWriter acessoArquivo = new FileWriter(new File(diretorioProdutos.getPath() + "/"+ caminhoArquivo + ".txt"));
+            PrintWriter printer = new PrintWriter(acessoArquivo);
+        ) {
+
+            printer.println("REVISTA");
+            printer.println(revista.getCodigo());
+            printer.println(revista.getNome());
+            printer.println(Double.toString(revista.getPreco()));
+            printer.println(Integer.toString(revista.getQtdEmEstoque()));
+            printer.println(revista.getISBN());
+            printer.println(revista.getEditora());
+            printer.println(Integer.toString(revista.getAnoPublicacao()));
+            printer.println(revista.getGenero());
+            printer.print(revista.getMarca());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void instanciarAcompanhamentoObjeto(Acompanhamento acompanhamento) {
+        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+
+        String caminhoArquivo = Integer.toString(acompanhamento.hashCode());
+
+        try (
+            FileWriter acessoArquivo = new FileWriter(new File(diretorioProdutos.getPath() + "/"+ caminhoArquivo + ".txt"));
+            PrintWriter printer = new PrintWriter(acessoArquivo);
+        ) {
+
+            printer.println("ACOMPANHAMENTO");
+            printer.println(acompanhamento.getCodigo());
+            printer.println(acompanhamento.getNome());
+            printer.println(Double.toString(acompanhamento.getPreco()));
+            printer.println(Integer.toString(acompanhamento.getQtdEmEstoque()));
+            printer.println(acompanhamento.getValidade());
+            printer.print(acompanhamento.getTipoAcompanhamento());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void instanciarBebidaObjeto(Bebida bebida) {
+        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+
+        String caminhoArquivo = Integer.toString(bebida.hashCode());
+
+        try (
+            FileWriter acessoArquivo = new FileWriter(new File(diretorioProdutos.getPath() + "/"+ caminhoArquivo + ".txt"));
+            PrintWriter printer = new PrintWriter(acessoArquivo);
+        ) {
+
+            printer.println("BEBIDA");
+            printer.println(bebida.getCodigo());
+            printer.println(bebida.getNome());
+            printer.println(Double.toString(bebida.getPreco()));
+            printer.println(Integer.toString(bebida.getQtdEmEstoque()));
+            printer.println(bebida.getValidade());
+            printer.print(bebida.getTipoBebida());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void instanciarProdutoObjeto(Produto produto) {
+        
+        // Livraria produtoLivraria;
+        // Alimentos produtoAlimentos;
+
+        String conteudo = produto.getClass().getSimpleName().toLowerCase();
+
+        switch (conteudo.toLowerCase()) {
+            case "livro":
+                instanciarLivroObjeto((Livro) produto);
+                setProdutos(produto);
+                break;
+            case "hq":
+                instanciarHQObjeto((HQ) produto);
+                setProdutos(produto);
+                break;
+            case "revista":
+                instanciarRevistaObjeto((Revista) produto);
+                setProdutos(produto);
+                break;
+            case "bebida":
+                instanciarBebidaObjeto((Bebida) produto);
+                setProdutos(produto);
+                break;
+            case "acompanhamento":
+                instanciarAcompanhamentoObjeto((Acompanhamento) produto);
+                setProdutos(produto);
+                break;
+            default:
+                break;
+        }
+    }
 }
