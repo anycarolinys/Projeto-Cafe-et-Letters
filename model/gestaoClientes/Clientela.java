@@ -28,9 +28,8 @@ public class Clientela implements ArquivosClientes {
             System.out.println(getClientes().get(i).getNome());
     }
     
-    public void cadastrarCliente(String caminhoArquivo) {
+    public void cadastrarClienteArquivo(String caminhoArquivo) {
         Cliente cliente = new Cliente();
-
         
         try (
                 FileReader acessoArquivo = new FileReader(caminhoArquivo);
@@ -48,27 +47,68 @@ public class Clientela implements ArquivosClientes {
         setClientes(cliente);
     }
 
-    public void deletarCliente(File caminhoDiretorio, String CPF) throws FileNotFoundException {
-        List<String> listaArquivos = new ArrayList<>();
-        percorrerArquivosEmPasta(caminhoDiretorio, listaArquivos);
+    public void cadastrarClienteObjeto(Cliente cliente) {
+        File diretorioClientes = new File("./src/model/gestaoClientes/clientesCadastrados");
+        
+        String caminhoArquivo = Integer.toString(cliente.hashCode());
 
-        for (String caminhoArquivo : listaArquivos) {
-            File arquivo = new File(caminhoDiretorio + "\\" + caminhoArquivo);
-            
-            String CPFAtual = "";
-
-            try (                
-                FileReader acessoArquivo = new FileReader(arquivo);
-                BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
-            ) {
-                CPFAtual = leitorArquivo.readLine();
-                if (CPFAtual.equals(CPF)) {
-                    System.out.println(CPFAtual);
-                    arquivo.delete();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }   
+        try (
+            FileWriter acessoArquivo = new FileWriter(diretorioClientes + "\\" + caminhoArquivo + ".txt");
+            BufferedWriter buffer = new BufferedWriter(acessoArquivo);
+        ) {
+            buffer.write(cliente.getCPF());
+            buffer.write(cliente.getNome());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
+    public File buscarClienteParaExcluir(File caminhoDiretorio, String CPF) throws FileNotFoundException {
+
+        List<String> arquivosClientes = new ArrayList<>();
+        percorrerArquivosEmPasta(caminhoDiretorio, arquivosClientes);
+
+        File arquivo = new File("");
+
+        for (String caminhoArquivo : arquivosClientes) {
+            arquivo = new File(caminhoDiretorio + "\\" + caminhoArquivo);
+            try (
+                FileReader leitor = new FileReader(arquivo);
+                BufferedReader buffer = new BufferedReader(leitor);
+            ) {
+                if (buffer.readLine().equals(CPF))
+                    break;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return arquivo;
+    }
+
+    public boolean excluirCliente(File caminhoArquivo) {
+        return caminhoArquivo.delete();
+    }
+
+    public Cliente buscarCliente(String CPF) {
+        Cliente cliente = new Cliente();
+
+        for(int i = 0; i < getClientes().size() ; i++) {
+            if (getClientes().get(i).getCPF().equals(CPF)) {
+                cliente = getClientes().get(i);
+                break;
+            }
+        }
+
+        return cliente;
+    }
+
+    public boolean isPrimeiraCompra(String CPF) {
+        for (Cliente cliente : getClientes()) {
+            if (cliente.getCPF().equals(CPF) && (cliente.getCompras().size() == 0))   
+                return true;
+        }
+        return false;
+    }
+
 }
