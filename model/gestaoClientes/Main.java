@@ -1,9 +1,7 @@
 package model.gestaoClientes;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,14 +12,18 @@ public class Main {
         clientela.percorrerArquivosEmPasta(diretorioClientes, arquivosClientes);
 
         for (String nomeArquivo : arquivosClientes) {
-            clientela.cadastrarCliente(diretorioClientes + "\\" + nomeArquivo);
+            clientela.cadastrarClienteArquivo(diretorioClientes + "\\" + nomeArquivo);
         }
 
         // clientela.listarClientesAtivos();
-        try {
-            clientela.deletarCliente(diretorioClientes, "12345678910");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        // try {
+        //     File arquivo = clientela.procurarArquivoCliente(diretorioClientes, "12345678919");
+        //     System.out.println(arquivo.getPath());
+        //     clientela.excluirCliente(arquivo);
+        // } catch (FileNotFoundException e) {
+        //     e.printStackTrace();
+        // }
+
+        clientela.listarClientesAtivos(); 
     }
 }

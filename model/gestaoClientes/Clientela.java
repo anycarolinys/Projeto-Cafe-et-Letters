@@ -103,12 +103,4 @@ public class Clientela implements ArquivosClientes {
         return cliente;
     }
 
-    public boolean isPrimeiraCompra(String CPF) {
-        for (Cliente cliente : getClientes()) {
-            if (cliente.getCPF().equals(CPF) && (cliente.getCompras().size() == 0))   
-                return true;
-        }
-        return false;
-    }
-
 }

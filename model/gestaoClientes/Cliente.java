@@ -46,4 +46,10 @@ public class Cliente {
 
     public void listarCompras() {
     }
+
+    public boolean isPrimeiraCompra() {
+        if (getCompras().size() > 0)
+                return true;
+        return false;
+    }
 }
