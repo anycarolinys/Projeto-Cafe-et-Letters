@@ -6,12 +6,17 @@ import java.util.List;
 import model.gestaoProdutos.*;
 
 public interface ArquivosProdutos {
+    
+    public void inicializarProdutos(String caminhoArquivo);
+
+    public void listarProdutos();
+
+    public void instanciarProdutoArquivo(String caminhoArquivo);
 
     public File procurarArquivoProduto(File caminhoDiretorio, String codigo) throws FileNotFoundException;
 
     public boolean excluirProdutoArquivo(File caminhoArquivo);
 
-    public void instanciarProdutoArquivo(String caminhoArquivo);
 
     public Livro instanciarLivroArquivo(String caminhoArquivo);
 
@@ -23,18 +28,17 @@ public interface ArquivosProdutos {
 
     public Acompanhamento instanciarAcompanhamentoArquivo(String caminhoArquivo); 
 
-    public void instanciarProdutoObjeto(Produto produto);
-
     public void instanciarLivroObjeto(Livro livro);
 
     public void instanciarHQObjeto(HQ hq);
 
     public void instanciarRevistaObjeto(Revista revista);
 
-    public void instanciarBebidaObjeto(Bebida bebida);
-
     public void instanciarAcompanhamentoObjeto(Acompanhamento acompanhamento); 
 
+    public void instanciarBebidaObjeto(Bebida bebida);
+
+    public void instanciarProdutoObjeto(Produto produto);
 
     public default void percorrerArquivosEmPasta(File pasta) {
         for (File arquivo : pasta.listFiles()) {

@@ -8,12 +8,12 @@ import model.gestaoClientes.Cliente;
 
 public interface ArquivosClientes {
 
-    public default void percorrerArquivosEmPasta(File pasta, List<String> arquivosDeClientes) {
+    public default void percorrerArquivosEmPasta(File pasta, List<String> arquivosClientes) {
         for (File arquivo : pasta.listFiles()) {
             if (!arquivo.isDirectory()) {
-                arquivosDeClientes.add(arquivo.getName());
+                arquivosClientes.add(arquivo.getName());
             } else {
-                percorrerArquivosEmPasta(pasta, arquivosDeClientes);
+                percorrerArquivosEmPasta(pasta, arquivosClientes);
             }
         }
     }

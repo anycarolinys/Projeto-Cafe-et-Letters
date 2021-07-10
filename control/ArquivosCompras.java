@@ -16,11 +16,5 @@ public interface ArquivosCompras {
         }
     }
 
-//     // Cadastra compra para cliente que nunca comprou
-//     public void cadastrarCompra(Cliente cliente, Compra compra, File diretorioCompras);
-    
-//     // Cadastra compra para cliente que já comprou
-//     public void cadastrarCompra(String CPF, File diretorioCompras);
-
 //     public void cadastroCompra(Cliente cliente, Compra compra, File diretorioCompras);
 }

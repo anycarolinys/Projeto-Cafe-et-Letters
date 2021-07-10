@@ -1,29 +1,19 @@
 package control;
 
-import java.text.ParseException;
-import java.io.*;
-import java.util.*;
+// import java.io.BufferedWriter;
+// import java.io.File;
+// import java.io.FileWriter;
+// import java.io.IOException;
 
-import model.gestaoVendas.*;
+import model.gestaoVendas.Compra;
+
 
 public class Main {
-    public static void main(String[] args) throws ParseException {
-
-        Estoque estoque = new Estoque();
-        // Passando pasta onde os arquivos estao localizados
-        File diretorioArquivos = new File("./src/control/produtosCadastrados");
-
-        // Criando array
-        List<String> arquivosDeProdutos = new ArrayList<>();
-        estoque.findAllFilesInFolder(diretorioArquivos, arquivosDeProdutos);
-        System.out.println(arquivosDeProdutos);
-
-        for (String nomeArquivo : arquivosDeProdutos) {
-            // Arquivos.lerArquivo(diretorioArquivos.toString() + '\\' + nomeArquivo);
-            estoque.instanciaProduto(diretorioArquivos.toString() + '\\' + nomeArquivo);
-        }   
-
-        // estoque.listarProdutosCadastrados();
-
+    public static void main(String[] args) {
+        Compra c1 = new Compra();
+        Compra c2 = new Compra();
+        System.out.println();
+        System.out.println(c1.hashCode());
+        System.out.println(c2.hashCode());
     }
 }
