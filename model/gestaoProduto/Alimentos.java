@@ -1,4 +1,4 @@
-package model.gestaoProduto;
+package model.gestaoProdutos;
 
 
 public class Alimentos extends Produto {
@@ -8,8 +8,8 @@ public class Alimentos extends Produto {
         this.validade = new Validade();
     }
     
-    public Alimentos(String codigo, String nome, double preco, int qtdEmEstoque, int mesValidade, int anoValidade) {
-        super(codigo, nome, preco, qtdEmEstoque);
+    public Alimentos(String codigo, int qtdEmEstoque, String nome, double preco, int mesValidade, int anoValidade) {
+        super(codigo, qtdEmEstoque, nome, preco);
         this.validade = new Validade(mesValidade, anoValidade);
     }
 

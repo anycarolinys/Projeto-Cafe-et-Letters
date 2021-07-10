@@ -1,4 +1,4 @@
-package model.gestaoProduto;
+package model.gestaoProdutos;
 
 public class HQ extends Autoria {
 
@@ -7,15 +7,15 @@ public class HQ extends Autoria {
 
     public HQ(
         String codigo, 
+        int qtdEmEstoque,
         String nome, 
         double preco, 
-        int qtdEmEstoque, 
         String iSBN, 
         String editora,
         int anoPublicacao, 
         String genero, 
         String autor) {
-        super(codigo, nome, preco, qtdEmEstoque, iSBN, editora, anoPublicacao, genero, autor);
+        super(codigo, qtdEmEstoque, nome, preco, iSBN, editora, anoPublicacao, genero, autor);
     }
 
     @Override

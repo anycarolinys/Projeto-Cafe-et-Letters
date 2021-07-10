@@ -1,4 +1,4 @@
-package model.gestaoProduto;
+package model.gestaoProdutos;
 
 public abstract class Produto {
     private String codigo;
@@ -8,11 +8,11 @@ public abstract class Produto {
 
     public Produto() {}
 
-    public Produto(String codigo, String nome, double preco, int qtdEmEstoque) {
+    public Produto(String codigo, int qtdEmEstoque, String nome, double preco) {
         this.codigo = codigo;
+        this.qtdEmEstoque = qtdEmEstoque;
         this.nome = nome;
         this.preco = preco;
-        this.qtdEmEstoque = qtdEmEstoque;
     }
 
     public String getNome() {

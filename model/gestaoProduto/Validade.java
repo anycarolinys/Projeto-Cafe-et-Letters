@@ -1,4 +1,4 @@
-package model.gestaoProduto;
+package model.gestaoProdutos;
 
 public class Validade {
     private int mes;

@@ -1,4 +1,4 @@
-package model.gestaoProduto;
+package model.gestaoProdutos;
 
 public class Bebida extends Alimentos {
     private String tipoBebida;
@@ -7,9 +7,9 @@ public class Bebida extends Alimentos {
         
     }
 
-    public Bebida(String codigo, String nome, double preco, int qtdEmEstoque, int mesValidade, int anoValidade,
+    public Bebida(String codigo, int qtdEmEstoque, String nome, double preco, int mesValidade, int anoValidade,
             String tipoBebida) {
-        super(codigo, nome, preco, qtdEmEstoque, mesValidade, anoValidade);
+        super(codigo, qtdEmEstoque, nome, preco, mesValidade, anoValidade);
         this.tipoBebida = tipoBebida;
     }
 

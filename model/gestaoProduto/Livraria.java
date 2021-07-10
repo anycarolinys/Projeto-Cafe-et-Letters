@@ -1,4 +1,4 @@
-package model.gestaoProduto;
+package model.gestaoProdutos;
 
 public class Livraria extends Produto {
     private String ISBN;
@@ -9,8 +9,8 @@ public class Livraria extends Produto {
     
     public Livraria() {}
     
-    public Livraria(String codigo, String nome, double preco, int qtdEmEstoque, String iSBN, String editora, int anoPublicacao, String genero) {
-        super(codigo, nome, preco, qtdEmEstoque);
+    public Livraria(String codigo, int qtdEmEstoque, String nome, double preco, String iSBN, String editora, int anoPublicacao, String genero) {
+        super(codigo, qtdEmEstoque, nome, preco);
         ISBN = iSBN;
         this.editora = editora;
         this.anoPublicacao = anoPublicacao;

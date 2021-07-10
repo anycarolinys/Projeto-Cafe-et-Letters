@@ -1,4 +1,4 @@
-package model.gestaoProduto;
+package model.gestaoProdutos;
 
 public class Revista extends Livraria{
     private String marca;
@@ -8,16 +8,16 @@ public class Revista extends Livraria{
     }
 
     public Revista(
-        String codigo, 
+        String codigo,
+        int qtdEmEstoque,
         String nome, 
         double preco, 
-        int qtdEmEstoque, 
         String iSBN, 
         String editora,
         int anoPublicacao, 
         String genero, 
         String marca) {
-        super(codigo, nome, preco, qtdEmEstoque, iSBN, editora, anoPublicacao, genero);
+        super(codigo, qtdEmEstoque, nome, preco, iSBN, editora, anoPublicacao, genero);
         this.marca = marca;
     }
 

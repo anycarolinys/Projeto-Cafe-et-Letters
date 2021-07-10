@@ -1,4 +1,4 @@
-package model.gestaoProduto;
+package model.gestaoProdutos;
 
 public class Acompanhamento extends Alimentos {
     private String tipoAcompanhamento;
@@ -7,14 +7,14 @@ public class Acompanhamento extends Alimentos {
     }
 
     public Acompanhamento(
-    String codigo, 
+    String codigo,
+    int qtdEmEstoque, 
     String nome, 
     double preco, 
-    int qtdEmEstoque, 
     int mesValidade, 
     int anoValidade,
     String tipoAcompanhamento) {
-        super(codigo, nome, preco, qtdEmEstoque, mesValidade, anoValidade);
+        super(codigo, qtdEmEstoque, nome, preco, mesValidade, anoValidade);
         this.tipoAcompanhamento = tipoAcompanhamento;
     }
 
