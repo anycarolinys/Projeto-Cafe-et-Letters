@@ -1,21 +1,18 @@
 package model.gestaoVendas;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Venda {
     private double valorTotal;
     private double valorPago;
-    private double troco;
-    private Calendar data;
+    private String dataHora;
 
-    public Venda(){
+    public Venda(){}
 
-    }
-
-    public Venda(double valorTotal, double valorPago, double troco, Calendar data) {
+    public Venda(double valorTotal, double valorPago) {
         this.valorTotal = valorTotal;
         this.valorPago = valorPago;
-        this.troco = troco;
-        this.data = data;
+        setDataHora();
     }
 
     public double getValorTotal() {
@@ -34,23 +31,18 @@ public class Venda {
         this.valorPago = valorPago;
     }
 
-    public Calendar getData() {
-        return data;
+    public double gerarTroco() {
+        return getValorTotal() - getValorPago();
     }
 
-    public void setData(Calendar data) {
-        this.data = data;
+
+    public String getDataHora() {
+        return dataHora;
     }
 
-    public double getTroco() {
-        return troco;
+    public void setDataHora() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        this.dataHora = dtf.format(LocalDateTime.now());
     }
 
-    public void setTroco(double troco) {
-        this.troco = troco;
-    }
-
-    public double gerarTroco(double recebido){
-        return recebido;
-    }   
 }

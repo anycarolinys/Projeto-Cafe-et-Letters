@@ -3,20 +3,14 @@ package model.gestaoVendas;
 import java.util.*;
 
 public class ConjuntoCompras {
-    private Set<Compra> vendas;
+    private static Set<Compra> compras;
 
-    public ConjuntoCompras() {
-        this.vendas = new TreeSet<>();
+    public Set<Compra> getCompras() {
+        return compras;
     }
 
-    public Set<Compra> getVendas() {
-        return vendas;
+    public static void adicionarCompras(Compra compra) {
+        compras.add(compra);
     }
-
-    public void setVendas(Set<Compra> vendas) {
-        this.vendas = vendas;
-    }
-
-    public void listarVendas(){}
-    
+        
 }

@@ -122,15 +122,15 @@ public class Estoque implements ArquivosProdutos {
             // que indica o tipo de produto e não é um atributo
             leitorArquivo.readLine();
 
-            livro = new Livro(leitorArquivo.readLine(),
-            leitorArquivo.readLine(),
-            Double.parseDouble(leitorArquivo.readLine()), 
-            Integer.parseInt(leitorArquivo.readLine()),
-            leitorArquivo.readLine(), 
-            leitorArquivo.readLine(), 
-            Integer.parseInt(leitorArquivo.readLine()),
-            leitorArquivo.readLine(), 
-            leitorArquivo.readLine());
+            livro = new Livro(leitorArquivo.readLine(), // Codigo
+            Integer.parseInt(leitorArquivo.readLine()), // Quantidade em estoque
+            leitorArquivo.readLine(), // Nome
+            Double.parseDouble(leitorArquivo.readLine()), // Preco
+            leitorArquivo.readLine(), // ISBN
+            leitorArquivo.readLine(),  // Editora
+            Integer.parseInt(leitorArquivo.readLine()), // Ano de publicação
+            leitorArquivo.readLine(), // Genero
+            leitorArquivo.readLine()); // Autor
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -154,9 +154,9 @@ public class Estoque implements ArquivosProdutos {
             leitorArquivo.readLine();
 
             hq = new HQ(leitorArquivo.readLine(), 
+            Integer.parseInt(leitorArquivo.readLine()),
             leitorArquivo.readLine(),
             Double.parseDouble(leitorArquivo.readLine()), 
-            Integer.parseInt(leitorArquivo.readLine()),
             leitorArquivo.readLine(), 
             leitorArquivo.readLine(), 
             Integer.parseInt(leitorArquivo.readLine()),
@@ -182,9 +182,9 @@ public class Estoque implements ArquivosProdutos {
             leitorArquivo.readLine();
 
             revista = new Revista(leitorArquivo.readLine(), 
+            Integer.parseInt(leitorArquivo.readLine()),
             leitorArquivo.readLine(),
             Double.parseDouble(leitorArquivo.readLine()), 
-            Integer.parseInt(leitorArquivo.readLine()),
             leitorArquivo.readLine(), 
             leitorArquivo.readLine(), 
             Integer.parseInt(leitorArquivo.readLine()),
@@ -210,13 +210,13 @@ public class Estoque implements ArquivosProdutos {
             bebida.setCodigo(conteudo);
 
             conteudo = leitorArquivo.readLine();
+            bebida.setQtdEmEstoque(Integer.parseInt(conteudo));
+            
+            conteudo = leitorArquivo.readLine();
             bebida.setNome(conteudo);
 
             conteudo = leitorArquivo.readLine();
             bebida.setPreco(Double.parseDouble(conteudo));
-
-            conteudo = leitorArquivo.readLine();
-            bebida.setQtdEmEstoque(Integer.parseInt(conteudo));
 
             String validade[] = leitorArquivo.readLine().split("/", 2);
 
@@ -244,13 +244,13 @@ public class Estoque implements ArquivosProdutos {
             acompanhamento.setCodigo(conteudo);
 
             conteudo = leitorArquivo.readLine();
+            acompanhamento.setQtdEmEstoque(Integer.parseInt(conteudo));
+
+            conteudo = leitorArquivo.readLine();
             acompanhamento.setNome(conteudo);
 
             conteudo = leitorArquivo.readLine();
             acompanhamento.setPreco(Double.parseDouble(conteudo));
-
-            conteudo = leitorArquivo.readLine();
-            acompanhamento.setQtdEmEstoque(Integer.parseInt(conteudo));
 
             String validade[] = leitorArquivo.readLine().split("/", 2);
 
@@ -278,9 +278,9 @@ public class Estoque implements ArquivosProdutos {
 
             printer.println("LIVRO");
             printer.println(livro.getCodigo());
+            printer.println(Integer.toString(livro.getQtdEmEstoque()));
             printer.println(livro.getNome());
             printer.println(Double.toString(livro.getPreco()));
-            printer.println(Integer.toString(livro.getQtdEmEstoque()));
             printer.println(livro.getISBN());
             printer.println(livro.getEditora());
             printer.println(Integer.toString(livro.getAnoPublicacao()));
@@ -304,9 +304,9 @@ public class Estoque implements ArquivosProdutos {
             
             printer.println("HQ");
             printer.println(hq.getCodigo());
+            printer.println(Integer.toString(hq.getQtdEmEstoque()));
             printer.println(hq.getNome());
             printer.println(Double.toString(hq.getPreco()));
-            printer.println(Integer.toString(hq.getQtdEmEstoque()));
             printer.println(hq.getISBN());
             printer.println(hq.getEditora());
             printer.println(Integer.toString(hq.getAnoPublicacao()));
@@ -330,9 +330,9 @@ public class Estoque implements ArquivosProdutos {
 
             printer.println("REVISTA");
             printer.println(revista.getCodigo());
+            printer.println(Integer.toString(revista.getQtdEmEstoque()));
             printer.println(revista.getNome());
             printer.println(Double.toString(revista.getPreco()));
-            printer.println(Integer.toString(revista.getQtdEmEstoque()));
             printer.println(revista.getISBN());
             printer.println(revista.getEditora());
             printer.println(Integer.toString(revista.getAnoPublicacao()));
@@ -356,9 +356,9 @@ public class Estoque implements ArquivosProdutos {
 
             printer.println("ACOMPANHAMENTO");
             printer.println(acompanhamento.getCodigo());
+            printer.println(Integer.toString(acompanhamento.getQtdEmEstoque()));
             printer.println(acompanhamento.getNome());
             printer.println(Double.toString(acompanhamento.getPreco()));
-            printer.println(Integer.toString(acompanhamento.getQtdEmEstoque()));
             printer.println(acompanhamento.getValidade());
             printer.print(acompanhamento.getTipoAcompanhamento());
 
@@ -379,9 +379,9 @@ public class Estoque implements ArquivosProdutos {
 
             printer.println("BEBIDA");
             printer.println(bebida.getCodigo());
+            printer.println(Integer.toString(bebida.getQtdEmEstoque()));
             printer.println(bebida.getNome());
             printer.println(Double.toString(bebida.getPreco()));
-            printer.println(Integer.toString(bebida.getQtdEmEstoque()));
             printer.println(bebida.getValidade());
             printer.print(bebida.getTipoBebida());
 
@@ -392,8 +392,6 @@ public class Estoque implements ArquivosProdutos {
 
     public void instanciarProdutoObjeto(Produto produto) {
         
-        // Livraria produtoLivraria;
-        // Alimentos produtoAlimentos;
 
         String conteudo = produto.getClass().getSimpleName().toLowerCase();
 
@@ -423,3 +421,13 @@ public class Estoque implements ArquivosProdutos {
         }
     }
 }
+/*     public void editarProdutoEstoque(String codigo, File diretorioProdutos) {
+         
+        try {
+            // File arquivoProduto = procurarArquivoProduto(diretorioProdutos, codigo);
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+ 
+    } */

@@ -8,52 +8,69 @@ public class Transacao {
     public Transacao() {
     }
 
-    public void cadastroCompra(Cliente cliente, Clientela clientela, Compra compra) {
+    public File criarDiretorioCliente(File diretorioCompra, Cliente cliente) {
+        File diretorioCliente = new File(diretorioCompra.getPath() + "/" + cliente.getCPF());
+        diretorioCliente.mkdir();
+        return diretorioCliente;
+    }
 
-        boolean isCadastrado = clientela.isPrimeiraCompra(cliente.getCPF());
+    public File buscarDiretorioCliente(File caminhoDiretorioGeral, Cliente cliente) {
+
+        File[] diretoriosClientes  = caminhoDiretorioGeral.listFiles();
+        File pastaCliente = new File("");
+
+        for (File file : diretoriosClientes) {
+            if (file.getName().equals(cliente.getCPF())) {
+                pastaCliente = file;
+                break;
+            }
+        }
+
+        return pastaCliente;
+    } 
+
+    public void cadastroCompra(Cliente cliente, Compra compra) {
+
+        boolean isCadastrado = cliente.isPrimeiraCompra();
         File diretorioCompras = new File("./src/model/gestaoClientes/comprasCadastradas");
+        File diretorioCliente;
         
         if (isCadastrado) { 
-            cadastrarCompra(cliente.getCPF(), diretorioCompras, compra);
+            System.out.println("Cliente cadastrado!");
+            diretorioCliente = new File(diretorioCompras.getPath() + "/" + cliente.getCPF());
+            cadastrarCompra(diretorioCliente, cliente, compra);
             cliente.setCompras(compra);
         } else {
-            File diretorioCompraCliente = new File("./src/model/gestaoClientes/comprasCadastradas" + cliente.getCPF());
-            diretorioCompraCliente.mkdir();
-            cadastrarCompra(cliente.getCPF(), diretorioCompras, compra);
+            System.out.println("Cliente não cadastrado!");
+            diretorioCliente = criarDiretorioCliente(diretorioCompras, cliente);
+            cadastrarCompra(diretorioCliente, cliente, compra);
             cliente.setCompras(compra);
         }
     }
+    
+    private void cadastrarCompra(File diretorioCliente, Cliente cliente, Compra compra) {
 
-    public void cadastrarCompra(String CPF, File diretorioGeralCompras, Compra compra) {
-
-        File diretorioCompraCliente = new File(diretorioGeralCompras + "\\" + CPF);
 
         String nomeArquivoCompra = Integer.toString(compra.hashCode());
 
-        try (FileWriter acessoArquivo = new FileWriter(diretorioCompraCliente + "\\" + nomeArquivoCompra + ".txt");
-                BufferedWriter buffer = new BufferedWriter(acessoArquivo);) {
-                buffer.write(compra.getProduto().getNome());
-                buffer.newLine();
+        try (
+            FileWriter acessoArquivo = new FileWriter(new File(diretorioCliente.getPath() + "/" + nomeArquivoCompra + ".txt"));
+            PrintWriter printer = new PrintWriter(acessoArquivo);
+        ){
+            printer.println(compra.getProduto().getNome());
+            
+            printer.println(compra.getProduto().getCodigo());
 
-                buffer.write(Integer.toString(compra.getQuantidadeProduto()));
-                buffer.newLine();
+            printer.println(compra.getQuantidadeProduto());
 
-                buffer.write(compra.getProduto().getCodigo());
-                buffer.newLine();
+            printer.println(compra.getDataHora());
 
-                buffer.write(Double.toString(compra.getValorTotal()));
-                buffer.newLine();
-
-                buffer.write(Double.toString(compra.getValorPago()));
-                buffer.newLine();
-
-                buffer.write(Double.toString(compra.getTroco()));
-                buffer.newLine();
-
-                buffer.write(compra.getData().toString());
+            printer.println(compra.getValorTotal());
+            
+            printer.print(compra.getValorPago());
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } 
 }

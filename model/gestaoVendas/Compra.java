@@ -6,7 +6,7 @@ package model.gestaoVendas;
 // import java.io.IOException;
 // import java.util.ArrayList;
 // import java.util.List;
-import java.util.Calendar;
+// import java.util.Calendar;
 
 import control.ArquivosCompras;
 import model.gestaoProdutos.Produto;
@@ -21,11 +21,10 @@ public class Compra extends Venda implements ArquivosCompras{
     public Compra(
         double valorTotal, 
         double valorPago, 
-        double troco, 
-        Calendar data, 
-        Produto produto, int quantidadeProduto) {
+        Produto produto, 
+        int quantidadeProduto) {
 
-        super(valorTotal, valorPago, troco, data);
+        super(valorTotal, valorPago);
         // Compra não instancia produto, pois só é 
         // possível comprar o que se tem no estoque
         this.produto = produto;
@@ -47,4 +46,5 @@ public class Compra extends Venda implements ArquivosCompras{
     public void setQuantidadeProduto(int quantidadeProduto) {
         this.quantidadeProduto = quantidadeProduto;
     }
+
 }
