@@ -32,9 +32,9 @@ public class Revista extends Livraria{
     @Override
     public String toString() {
         return getCodigo() + "\n" +
+                getQtdEmEstoque() + "\n" +
                 getNome() + "\n" + 
                 getPreco() + "\n" + 
-                getQtdEmEstoque() + "\n" +
                 getISBN() + "\n" + 
                 getEditora() + "\n" + 
                 getAnoPublicacao() + "\n" +

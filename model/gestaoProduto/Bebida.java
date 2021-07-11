@@ -7,8 +7,14 @@ public class Bebida extends Alimentos {
         
     }
 
-    public Bebida(String codigo, int qtdEmEstoque, String nome, double preco, int mesValidade, int anoValidade,
-            String tipoBebida) {
+    public Bebida(
+        String codigo, 
+        int qtdEmEstoque, 
+        String nome, 
+        double preco, 
+        int mesValidade, 
+        int anoValidade,
+        String tipoBebida) {
         super(codigo, qtdEmEstoque, nome, preco, mesValidade, anoValidade);
         this.tipoBebida = tipoBebida;
     }
@@ -25,9 +31,9 @@ public class Bebida extends Alimentos {
     @Override
     public String toString() {
         return getCodigo() + "\n" +
+                getQtdEmEstoque() + "\n" +
                 getNome() + "\n" +
                 getPreco() + "\n" +
-                getQtdEmEstoque() + "\n" +
                 getValidade() + "\n" +
                 getTipoBebida() + "\n";
     }

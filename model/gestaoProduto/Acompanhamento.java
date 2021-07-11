@@ -29,9 +29,9 @@ public class Acompanhamento extends Alimentos {
     @Override
     public String toString() {
         return getCodigo() + "\n" +
+                getQtdEmEstoque() + "\n" +
                 getNome() + "\n" +
                 getPreco() + "\n" +
-                getQtdEmEstoque() + "\n" +
                 getValidade() + "\n" +
                 getTipoAcompanhamento() + "\n";
     }
