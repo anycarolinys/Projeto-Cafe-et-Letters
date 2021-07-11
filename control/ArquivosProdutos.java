@@ -9,14 +9,11 @@ public interface ArquivosProdutos {
     
     public void inicializarProdutos(String caminhoArquivo);
 
-    public void listarProdutos();
+    public void listarProdutosCadastrados();
 
     public void instanciarProdutoArquivo(String caminhoArquivo);
 
     public File procurarArquivoProduto(File caminhoDiretorio, String codigo) throws FileNotFoundException;
-
-    public boolean excluirProdutoArquivo(File caminhoArquivo);
-
 
     public Livro instanciarLivroArquivo(String caminhoArquivo);
 
@@ -28,17 +25,17 @@ public interface ArquivosProdutos {
 
     public Acompanhamento instanciarAcompanhamentoArquivo(String caminhoArquivo); 
 
-    public void instanciarLivroObjeto(Livro livro);
+    public void instanciarLivroObjeto(Livro livro, boolean pasta);
 
-    public void instanciarHQObjeto(HQ hq);
+    public void instanciarHQObjeto(HQ hq, boolean pasta);
 
-    public void instanciarRevistaObjeto(Revista revista);
+    public void instanciarRevistaObjeto(Revista revista, boolean pasta);
 
-    public void instanciarAcompanhamentoObjeto(Acompanhamento acompanhamento); 
+    public void instanciarAcompanhamentoObjeto(Acompanhamento acompanhamento, boolean pasta); 
 
-    public void instanciarBebidaObjeto(Bebida bebida);
+    public void instanciarBebidaObjeto(Bebida bebida, boolean pasta);
 
-    public void instanciarProdutoObjeto(Produto produto);
+    public void instanciarProdutoObjeto(Produto produto, boolean pasta);
 
     public default void percorrerArquivosEmPasta(File pasta) {
         for (File arquivo : pasta.listFiles()) {

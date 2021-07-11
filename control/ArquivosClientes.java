@@ -18,9 +18,9 @@ public interface ArquivosClientes {
         }
     }
 
-    public void cadastrarClienteArquivo(String caminhoArquivo);
+    public void instanciarClienteArquivo(String caminhoArquivo);
 
-    public void cadastrarClienteObjeto(Cliente cliente);
+    public void instanciarClienteObjeto(Cliente cliente, boolean pasta);
 
     public File buscarClienteParaExcluir(File caminhoDiretorio, String CPF) throws FileNotFoundException;
 
