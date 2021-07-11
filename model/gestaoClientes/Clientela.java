@@ -1,9 +1,8 @@
 package model.gestaoClientes;
 
-import java.util.List;
-
 import control.ArquivosClientes;
 
+import java.util.List;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -24,11 +23,16 @@ public class Clientela implements ArquivosClientes {
     }
 
     public void listarClientesAtivos(){
-        for(int i = 0; i < getClientes().size() ; i++) 
-            System.out.println(getClientes().get(i).getNome());
+        for (Cliente cliente : getClientes()) {
+            System.out.println(cliente.getNome());
+        }
+    }
+
+    public void removerCliente(Cliente cliente) {
+        getClientes().remove(cliente);
     }
     
-    public void cadastrarClienteArquivo(String caminhoArquivo) {
+    public void instanciarClienteArquivo(String caminhoArquivo) {
         Cliente cliente = new Cliente();
         
         try (
@@ -47,17 +51,21 @@ public class Clientela implements ArquivosClientes {
         setClientes(cliente);
     }
 
-    public void cadastrarClienteObjeto(Cliente cliente) {
-        File diretorioClientes = new File("./src/model/gestaoClientes/clientesCadastrados");
+    public void instanciarClienteObjeto(Cliente cliente, boolean pasta) {
+        File diretorioClientes;
+        if (pasta == true)
+            diretorioClientes = new File("./src/model/gestaoClientes/clientesCadastrados");
+        else
+            diretorioClientes = new File("./src/model/gestaoClientes/clientesExcluidos");
         
         String caminhoArquivo = Integer.toString(cliente.hashCode());
 
         try (
             FileWriter acessoArquivo = new FileWriter(diretorioClientes + "\\" + caminhoArquivo + ".txt");
-            BufferedWriter buffer = new BufferedWriter(acessoArquivo);
+            PrintWriter printer = new PrintWriter(acessoArquivo);
         ) {
-            buffer.write(cliente.getCPF());
-            buffer.write(cliente.getNome());
+            printer.println(cliente.getCPF());
+            printer.print(cliente.getNome());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,7 +76,9 @@ public class Clientela implements ArquivosClientes {
         List<String> arquivosClientes = new ArrayList<>();
         percorrerArquivosEmPasta(caminhoDiretorio, arquivosClientes);
 
-        File arquivo = new File("");
+        File arquivo = null;
+
+        Cliente clienteExcluido; 
 
         for (String caminhoArquivo : arquivosClientes) {
             arquivo = new File(caminhoDiretorio + "\\" + caminhoArquivo);
@@ -76,8 +86,12 @@ public class Clientela implements ArquivosClientes {
                 FileReader leitor = new FileReader(arquivo);
                 BufferedReader buffer = new BufferedReader(leitor);
             ) {
-                if (buffer.readLine().equals(CPF))
+                if (buffer.readLine().equals(CPF)) {
+                    clienteExcluido = buscarCliente(CPF);
+                    instanciarClienteObjeto(clienteExcluido, false);
+                    removerCliente(clienteExcluido);
                     break;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -91,16 +105,13 @@ public class Clientela implements ArquivosClientes {
     }
 
     public Cliente buscarCliente(String CPF) {
-        Cliente cliente = new Cliente();
 
-        for(int i = 0; i < getClientes().size() ; i++) {
-            if (getClientes().get(i).getCPF().equals(CPF)) {
-                cliente = getClientes().get(i);
-                break;
-            }
+        for (Cliente cliente : getClientes()) {
+            if (cliente.getCPF().equals(CPF))
+                return cliente;
         }
 
-        return cliente;
+        return null;
     }
 
 }
