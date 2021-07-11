@@ -9,13 +9,13 @@ import java.io.*;
 
 public class Estoque implements ArquivosProdutos {
 
-    Set<Produto> produtos;
+    List<Produto> produtos;
 
     public Estoque() {
-        this.produtos = new HashSet<>();
+        this.produtos = new ArrayList<>();
     }
 
-    public Set<Produto> getProdutos() {
+    public List<Produto> getProdutos() {
         return produtos;
     }
 
@@ -23,13 +23,28 @@ public class Estoque implements ArquivosProdutos {
         this.produtos.add(produto);
     }
 
+    public void removerProduto(Produto produto) {
+        getProdutos().remove(produto);
+    }
+
     public void inicializarProdutos(String caminhoArquivo) {
         instanciarProdutoArquivo(caminhoArquivo);
     }
 
-    public void listarProdutos() {
+    public void listarProdutosCadastrados() {
         for (Produto produto : produtos) {
             System.out.println(produto.toString());
+        }
+    }
+
+    public void atualizar() {
+        getProdutos().clear();
+
+        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+        List<String> arquivosProdutos = new ArrayList<>();
+        percorrerArquivosEmPasta(diretorioProdutos, arquivosProdutos);
+        for (String caminhoArquivo : arquivosProdutos) {
+            instanciarProdutoArquivo(diretorioProdutos + "/" + caminhoArquivo);
         }
     }
 
@@ -103,9 +118,6 @@ public class Estoque implements ArquivosProdutos {
         return arquivo;
     }
 
-    public boolean excluirProdutoArquivo(File caminhoArquivo) {
-        return caminhoArquivo.delete();
-    }
 
     public Livro instanciarLivroArquivo(String caminhoArquivo) {
         
@@ -266,8 +278,12 @@ public class Estoque implements ArquivosProdutos {
         return acompanhamento;
     }
     
-    public void instanciarLivroObjeto(Livro livro) {
-        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+    public void instanciarLivroObjeto(Livro livro, boolean pasta) {
+        File diretorioProdutos;
+        if (pasta == true)
+            diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+        else
+            diretorioProdutos = new File("./src/model/gestaoProdutos/produtosExcluidos");
 
         String caminhoArquivo = Integer.toString(livro.hashCode());
 
@@ -292,8 +308,13 @@ public class Estoque implements ArquivosProdutos {
         }
     }
 
-    public void instanciarHQObjeto(HQ hq) {
-        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+    public void instanciarHQObjeto(HQ hq, boolean pasta) {
+        File diretorioProdutos;
+
+        if (pasta == true)
+            diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+        else
+            diretorioProdutos = new File("./src/model/gestaoProdutos/produtosExcluidos");
 
         String caminhoArquivo = Integer.toString(hq.hashCode());
 
@@ -318,8 +339,14 @@ public class Estoque implements ArquivosProdutos {
         }
     }
 
-    public void instanciarRevistaObjeto(Revista revista) {
-        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+    public void instanciarRevistaObjeto(Revista revista, boolean pasta) {
+
+        File diretorioProdutos;
+
+        if (pasta == true)
+            diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+        else
+            diretorioProdutos = new File("./src/model/gestaoProdutos/produtosExcluidos");
 
         String caminhoArquivo = Integer.toString(revista.hashCode());
 
@@ -344,8 +371,14 @@ public class Estoque implements ArquivosProdutos {
         }
     }
 
-    public void instanciarAcompanhamentoObjeto(Acompanhamento acompanhamento) {
-        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+    public void instanciarAcompanhamentoObjeto(Acompanhamento acompanhamento, boolean pasta) {
+
+        File diretorioProdutos;
+
+        if (pasta == true)
+            diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+        else
+            diretorioProdutos = new File("./src/model/gestaoProdutos/produtosExcluidos");
 
         String caminhoArquivo = Integer.toString(acompanhamento.hashCode());
 
@@ -367,8 +400,14 @@ public class Estoque implements ArquivosProdutos {
         }
     }
 
-    public void instanciarBebidaObjeto(Bebida bebida) {
-        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+    public void instanciarBebidaObjeto(Bebida bebida, boolean pasta) {
+
+        File diretorioProdutos;
+
+        if (pasta == true)
+            diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+        else
+            diretorioProdutos = new File("./src/model/gestaoProdutos/produtosExcluidos");
 
         String caminhoArquivo = Integer.toString(bebida.hashCode());
 
@@ -390,39 +429,87 @@ public class Estoque implements ArquivosProdutos {
         }
     }
 
-    public void instanciarProdutoObjeto(Produto produto) {
+    public void instanciarProdutoObjeto(Produto produto, boolean pasta) {
         
 
         String conteudo = produto.getClass().getSimpleName().toLowerCase();
 
         switch (conteudo.toLowerCase()) {
             case "livro":
-                instanciarLivroObjeto((Livro) produto);
+                instanciarLivroObjeto((Livro) produto, pasta);
                 setProdutos(produto);
                 break;
             case "hq":
-                instanciarHQObjeto((HQ) produto);
+                instanciarHQObjeto((HQ) produto, pasta);
                 setProdutos(produto);
                 break;
             case "revista":
-                instanciarRevistaObjeto((Revista) produto);
+                instanciarRevistaObjeto((Revista) produto, pasta);
                 setProdutos(produto);
                 break;
             case "bebida":
-                instanciarBebidaObjeto((Bebida) produto);
+                instanciarBebidaObjeto((Bebida) produto, pasta);
                 setProdutos(produto);
                 break;
             case "acompanhamento":
-                instanciarAcompanhamentoObjeto((Acompanhamento) produto);
+                instanciarAcompanhamentoObjeto((Acompanhamento) produto, pasta);
                 setProdutos(produto);
                 break;
             default:
                 break;
         }
     }
+    
+    public File buscarProdutoParaExcluir(File caminhoDiretorio, String codigo) {
+        List <String> arquivosProdutos = new ArrayList<>();
+        percorrerArquivosEmPasta(caminhoDiretorio, arquivosProdutos);
+
+        Produto produtoExcluido;
+        File arquivo = null;
+        
+        for (String caminhoArquivo : arquivosProdutos) {
+            arquivo = new File(caminhoDiretorio + "/" + caminhoArquivo);
+
+            try (
+                FileReader leitor = new FileReader(arquivo);
+                BufferedReader buffer = new BufferedReader(leitor);
+            ) {
+                // A primeira linha do arquivo é um identificador pra representar o tipo de produto
+                buffer.readLine(); 
+                
+                if (buffer.readLine().equals(codigo))  {
+                    produtoExcluido = buscarProduto(codigo);
+                    instanciarProdutoObjeto(produtoExcluido, false);
+                    removerProduto(produtoExcluido);
+                    break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return arquivo;
+    }   
+
+    
+    public Produto buscarProduto(String codigo) {
+
+        for (Produto produto : getProdutos()) {
+            if (produto.getCodigo().equals(codigo)) {
+                return produto;
+            }
+        }
+        return null;
+    }
+
+    public boolean excluirArquivoProduto(File caminhoArquivo) {
+        return caminhoArquivo.delete();
+    }
 }
+
+
 /*     public void editarProdutoEstoque(String codigo, File diretorioProdutos) {
-         
+        
         try {
             // File arquivoProduto = procurarArquivoProduto(diretorioProdutos, codigo);
             
