@@ -4,7 +4,7 @@ import java.util.*;
 
 import java.io.*;
 
-public class Estoque implements ArquivosProdutos {
+public class Estoque implements ArquivosTexto {
 
     List<Produto> produtos;
 
@@ -192,11 +192,7 @@ public class Estoque implements ArquivosProdutos {
             conteudo = leitorArquivo.readLine();
             bebida.setPreco(Double.parseDouble(conteudo));
 
-            /* String validade[] = leitorArquivo.readLine().split("/", 2);
-
-            bebida.setValidade(Integer.parseInt(validade[0]), Integer.parseInt(validade[1]));
-
-            conteudo = leitorArquivo.readLine();
+            /*conteudo = leitorArquivo.readLine();
             bebida.setTipoBebida(conteudo); */
 
         } catch (Exception e) {
@@ -226,10 +222,7 @@ public class Estoque implements ArquivosProdutos {
             conteudo = leitorArquivo.readLine();
             acompanhamento.setPreco(Double.parseDouble(conteudo));
 
-            /* String validade[] = leitorArquivo.readLine().split("/", 2);
-            acompanhamento.setValidade(Integer.parseInt(validade[0]), Integer.parseInt(validade[1]));
-            
-            conteudo = leitorArquivo.readLine();
+            /*conteudo = leitorArquivo.readLine();
             acompanhamento.setTipoAcompanhamento(conteudo); */
 
         } catch (Exception e) {
