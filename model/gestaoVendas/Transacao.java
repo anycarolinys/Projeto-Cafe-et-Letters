@@ -143,8 +143,4 @@ public class Transacao {
         }
 
     }
-
-    public boolean excluirProduto(File caminhoArquivo) {
-        return caminhoArquivo.delete();
-    }
 }
