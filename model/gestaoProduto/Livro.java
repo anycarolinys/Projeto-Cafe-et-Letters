@@ -1,6 +1,6 @@
 package model.gestaoProdutos;
 
-public class Livro extends Autoria {
+public class Livro extends Livraria {
     
     public Livro() {
 
@@ -11,12 +11,12 @@ public class Livro extends Autoria {
         int qtdEmEstoque,
         String nome, 
         double preco, 
-        String iSBN, 
+        String ISBN, 
         String editora,
         int anoPublicacao, 
         String genero, 
         String autor) {
-        super(codigo, qtdEmEstoque, nome, preco, iSBN, editora, anoPublicacao, genero, autor);
+        super(codigo, qtdEmEstoque, nome, preco, ISBN, editora, anoPublicacao, genero, autor);
     }
 
     @Override

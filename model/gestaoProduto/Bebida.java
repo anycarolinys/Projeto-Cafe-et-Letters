@@ -1,6 +1,6 @@
 package model.gestaoProdutos;
 
-public class Bebida extends Alimentos {
+public class Bebida extends Produto {
     private String tipoBebida;
 
     public Bebida() {
@@ -11,12 +11,8 @@ public class Bebida extends Alimentos {
         String codigo, 
         int qtdEmEstoque, 
         String nome, 
-        double preco, 
-        int mesValidade, 
-        int anoValidade,
-        String tipoBebida) {
-        super(codigo, qtdEmEstoque, nome, preco, mesValidade, anoValidade);
-        this.tipoBebida = tipoBebida;
+        double preco) {
+        super(codigo, qtdEmEstoque, nome, preco);
     }
 
     public String getTipoBebida() {
@@ -33,8 +29,6 @@ public class Bebida extends Alimentos {
         return getCodigo() + "\n" +
                 getQtdEmEstoque() + "\n" +
                 getNome() + "\n" +
-                getPreco() + "\n" +
-                getValidade() + "\n" +
-                getTipoBebida() + "\n";
+                getPreco() + "\n";
     }
 }

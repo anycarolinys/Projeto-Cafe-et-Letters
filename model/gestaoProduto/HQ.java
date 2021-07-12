@@ -1,6 +1,6 @@
 package model.gestaoProdutos;
 
-public class HQ extends Autoria {
+public class HQ extends Livraria {
 
     public HQ() {
     }

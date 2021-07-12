@@ -5,16 +5,26 @@ public class Livraria extends Produto {
     private String editora;
     private int anoPublicacao;
     private String genero;
-    private String tipo;
+    private String autor;
     
     public Livraria() {}
     
-    public Livraria(String codigo, int qtdEmEstoque, String nome, double preco, String iSBN, String editora, int anoPublicacao, String genero) {
+    public Livraria(
+        String codigo, 
+        int qtdEmEstoque, 
+        String nome, 
+        double preco, 
+        String iSBN, 
+        String editora, 
+        int anoPublicacao, 
+        String genero, 
+        String autor) {
         super(codigo, qtdEmEstoque, nome, preco);
         ISBN = iSBN;
         this.editora = editora;
         this.anoPublicacao = anoPublicacao;
         this.genero = genero;
+        this.autor = autor;
     }
 
     public String getISBN() {
@@ -49,18 +59,19 @@ public class Livraria extends Produto {
         this.anoPublicacao = anoPublicacao;
     }
     
-    public String getTipo() {
-        return tipo;
+    
+    public String getAutor() {
+        return autor;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setAutor(String autor) {
+        this.autor = autor;
     }
 
     @Override
     public String toString() {
         return "Livraria [ISBN=" + ISBN + ", anoPublicacao=" + anoPublicacao + ", editora=" + editora + ", genero="
-                + genero + ", tipo=" + tipo + "]";
+                + genero;
     }
 
 }
