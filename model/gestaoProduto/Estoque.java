@@ -38,59 +38,59 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         getProdutos().clear();
 
         List<String> arquivosTxt = new ArrayList<>();
-        
+
         File produtosEmTxt = new File("./src/model/gestaoProdutos/produtosCadastrados/produtosTxt");
         percorrerArquivosEmPasta(produtosEmTxt, arquivosTxt);
-        
+
         for (String caminhoArquivo : arquivosTxt) {
             instanciarProdutoArquivo(produtosEmTxt + "/" + caminhoArquivo);
         }
-        
+
         List<String> arquivosJson = new ArrayList<>();
 
         File produtosJson = new File("./src/model/gestaoProdutos/produtosCadastrados/produtosJson");
         percorrerArquivosEmPasta(produtosJson, arquivosJson);
-        
-        for (String caminhoArquivo: arquivosJson) {
+
+        for (String caminhoArquivo : arquivosJson) {
             instanciarProdutoJson(new File(produtosJson + "/" + caminhoArquivo));
         }
     }
 
     public void instanciarProdutoArquivo(String caminhoArquivo) {
-        
+
         Livraria produtoLivraria;
         Bebida bebida;
         Acompanhamento acompanhamento;
 
         try (
 
-            FileReader acessoArquivo = new FileReader(caminhoArquivo);
-            BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
-            
+                FileReader acessoArquivo = new FileReader(caminhoArquivo);
+                BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
+
         ) {
             String conteudo = "";
-                // Lendo o tipo de produto a ser instanciado
-                conteudo = leitorArquivo.readLine();
+            // Lendo o tipo de produto a ser instanciado
+            conteudo = leitorArquivo.readLine();
 
-                switch (conteudo.toLowerCase()) {
-                    case "livro":
-                        produtoLivraria = instanciarLivroArquivo(caminhoArquivo);
-                        setProdutos(produtoLivraria);
-                        break;
-                    case "hq":
-                        produtoLivraria = instanciarHQArquivo(caminhoArquivo);
-                        setProdutos(produtoLivraria);
-                        break;
-                    case "bebida":
-                        bebida = instanciarBebidaArquivo(caminhoArquivo);
-                        setProdutos(bebida);
-                        break;
-                    case "acompanhamento":
-                        acompanhamento = instanciarAcompanhamentoArquivo(caminhoArquivo);
-                        setProdutos(acompanhamento);
-                        break;
-                    default:
-                        break;
+            switch (conteudo.toLowerCase()) {
+                case "livro":
+                    produtoLivraria = instanciarLivroArquivo(caminhoArquivo);
+                    setProdutos(produtoLivraria);
+                    break;
+                case "hq":
+                    produtoLivraria = instanciarHQArquivo(caminhoArquivo);
+                    setProdutos(produtoLivraria);
+                    break;
+                case "bebida":
+                    bebida = instanciarBebidaArquivo(caminhoArquivo);
+                    setProdutos(bebida);
+                    break;
+                case "acompanhamento":
+                    acompanhamento = instanciarAcompanhamentoArquivo(caminhoArquivo);
+                    setProdutos(acompanhamento);
+                    break;
+                default:
+                    break;
             }
 
         } catch (IOException e) {
@@ -108,12 +108,9 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         for (String caminhoArquivo : arquivosProdutos) {
             arquivo = new File(caminhoDiretorio + "\\" + caminhoArquivo);
 
-            try (
-                FileReader leitor = new FileReader(arquivo);
-                BufferedReader buffer = new BufferedReader(leitor);
-            ) {
+            try (FileReader leitor = new FileReader(arquivo); BufferedReader buffer = new BufferedReader(leitor);) {
                 buffer.readLine();
-                if(buffer.readLine().equals(codigo)) 
+                if (buffer.readLine().equals(codigo))
                     break;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -123,9 +120,8 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         return arquivo;
     }
 
-
     public Livro instanciarLivroArquivo(String caminhoArquivo) {
-        
+
         Livro livro = new Livro();
 
         try (
@@ -140,19 +136,18 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
             leitorArquivo.readLine();
 
             livro = new Livro(leitorArquivo.readLine(), // Codigo
-            Integer.parseInt(leitorArquivo.readLine()), // Quantidade em estoque
-            leitorArquivo.readLine(), // Nome
-            Double.parseDouble(leitorArquivo.readLine()), // Preco
-            leitorArquivo.readLine(), // ISBN
-            leitorArquivo.readLine(),  // Editora
-            Integer.parseInt(leitorArquivo.readLine()), // Ano de publicação
-            leitorArquivo.readLine(), // Genero
-            leitorArquivo.readLine()); // Autor
+                    Integer.parseInt(leitorArquivo.readLine()), // Quantidade em estoque
+                    leitorArquivo.readLine(), // Nome
+                    Double.parseDouble(leitorArquivo.readLine()), // Preco
+                    leitorArquivo.readLine(), // ISBN
+                    leitorArquivo.readLine(), // Editora
+                    Integer.parseInt(leitorArquivo.readLine()), // Ano de publicação
+                    leitorArquivo.readLine(), // Genero
+                    leitorArquivo.readLine()); // Autor
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         return livro;
     }
@@ -170,15 +165,9 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
             // que indica o tipo de produto e não é um atributo
             leitorArquivo.readLine();
 
-            hq = new HQ(leitorArquivo.readLine(), 
-            Integer.parseInt(leitorArquivo.readLine()),
-            leitorArquivo.readLine(),
-            Double.parseDouble(leitorArquivo.readLine()), 
-            leitorArquivo.readLine(), 
-            leitorArquivo.readLine(), 
-            Integer.parseInt(leitorArquivo.readLine()),
-            leitorArquivo.readLine(), 
-            leitorArquivo.readLine());
+            hq = new HQ(leitorArquivo.readLine(), Integer.parseInt(leitorArquivo.readLine()), leitorArquivo.readLine(),
+                    Double.parseDouble(leitorArquivo.readLine()), leitorArquivo.readLine(), leitorArquivo.readLine(),
+                    Integer.parseInt(leitorArquivo.readLine()), leitorArquivo.readLine(), leitorArquivo.readLine());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,15 +189,16 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
             conteudo = leitorArquivo.readLine();
             bebida.setQtdEmEstoque(Integer.parseInt(conteudo));
-            
+
             conteudo = leitorArquivo.readLine();
             bebida.setNome(conteudo);
 
             conteudo = leitorArquivo.readLine();
             bebida.setPreco(Double.parseDouble(conteudo));
 
-            /*conteudo = leitorArquivo.readLine();
-            bebida.setTipoBebida(conteudo); */
+            /*
+             * conteudo = leitorArquivo.readLine(); bebida.setTipoBebida(conteudo);
+             */
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -218,7 +208,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
     }
 
     public Acompanhamento instanciarAcompanhamentoArquivo(String caminhoArquivo) {
-        
+
         Acompanhamento acompanhamento = new Acompanhamento();
 
         try (FileReader acessoArquivo = new FileReader(caminhoArquivo);
@@ -237,8 +227,10 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
             conteudo = leitorArquivo.readLine();
             acompanhamento.setPreco(Double.parseDouble(conteudo));
 
-            /*conteudo = leitorArquivo.readLine();
-            acompanhamento.setTipoAcompanhamento(conteudo); */
+            /*
+             * conteudo = leitorArquivo.readLine();
+             * acompanhamento.setTipoAcompanhamento(conteudo);
+             */
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -246,7 +238,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
         return acompanhamento;
     }
-    
+
     public void instanciarLivroObjeto(Livro livro, boolean pasta) {
         File diretorioProdutos;
         if (pasta == true)
@@ -256,10 +248,9 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
         String caminhoArquivo = Integer.toString(livro.hashCode());
 
-        try (
-            FileWriter acessoArquivo = new FileWriter(new File(diretorioProdutos.getPath() + "/" + caminhoArquivo + ".txt"));
-            PrintWriter printer = new PrintWriter(acessoArquivo);
-        ) {
+        try (FileWriter acessoArquivo = new FileWriter(
+                new File(diretorioProdutos.getPath() + "/" + caminhoArquivo + ".txt"));
+                PrintWriter printer = new PrintWriter(acessoArquivo);) {
 
             printer.println("LIVRO");
             printer.println(livro.getCodigo());
@@ -287,11 +278,10 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
         String caminhoArquivo = Integer.toString(hq.hashCode());
 
-        try (
-            FileWriter acessoArquivo = new FileWriter(new File(diretorioProdutos.getPath() + "/"+ caminhoArquivo + ".txt"));
-            PrintWriter printer = new PrintWriter(acessoArquivo);
-        ) {
-            
+        try (FileWriter acessoArquivo = new FileWriter(
+                new File(diretorioProdutos.getPath() + "/" + caminhoArquivo + ".txt"));
+                PrintWriter printer = new PrintWriter(acessoArquivo);) {
+
             printer.println("HQ");
             printer.println(hq.getCodigo());
             printer.println(Integer.toString(hq.getQtdEmEstoque()));
@@ -319,10 +309,9 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
         String caminhoArquivo = Integer.toString(acompanhamento.hashCode());
 
-        try (
-            FileWriter acessoArquivo = new FileWriter(new File(diretorioProdutos.getPath() + "/"+ caminhoArquivo + ".txt"));
-            PrintWriter printer = new PrintWriter(acessoArquivo);
-        ) {
+        try (FileWriter acessoArquivo = new FileWriter(
+                new File(diretorioProdutos.getPath() + "/" + caminhoArquivo + ".txt"));
+                PrintWriter printer = new PrintWriter(acessoArquivo);) {
 
             printer.println("ACOMPANHAMENTO");
             printer.println(acompanhamento.getCodigo());
@@ -348,10 +337,9 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
         String caminhoArquivo = Integer.toString(bebida.hashCode());
 
-        try (
-            FileWriter acessoArquivo = new FileWriter(new File(diretorioProdutos.getPath() + "/"+ caminhoArquivo + ".txt"));
-            PrintWriter printer = new PrintWriter(acessoArquivo);
-        ) {
+        try (FileWriter acessoArquivo = new FileWriter(
+                new File(diretorioProdutos.getPath() + "/" + caminhoArquivo + ".txt"));
+                PrintWriter printer = new PrintWriter(acessoArquivo);) {
 
             printer.println("BEBIDA");
             printer.println(bebida.getCodigo());
@@ -367,8 +355,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
     }
 
     public void instanciarProdutoObjeto(Produto produto, boolean pasta) {
-        
-        
+
         String conteudo = produto.getClass().getSimpleName().toLowerCase();
 
         switch (conteudo.toLowerCase()) {
@@ -396,14 +383,12 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
     public List<Produto> instanciarLivroJson(File caminhoArquivo) {
 
         List<Produto> instanciaLivros = new ArrayList<>();
-        
-        try (
-            FileReader leitor = new FileReader(caminhoArquivo);
-        ) {
+
+        try (FileReader leitor = new FileReader(caminhoArquivo);) {
             if (caminhoArquivo.length() > 0) {
                 Object objeto = JsonParser.parseReader(leitor);
                 JsonArray listaLivros = (JsonArray) objeto;
-    
+
                 for (JsonElement livros : listaLivros) {
                     instanciaLivros.add(parseLivro((JsonObject) livros));
                 }
@@ -411,21 +396,15 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return instanciaLivros;
     }
 
     public Livro parseLivro(JsonObject livro) {
-        Livro objetoLivro = new Livro(
-                                        livro.get("codigo").getAsString(),
-                                        livro.get("qtdEmEstoque").getAsInt(),
-                                        livro.get("nome").getAsString(),
-                                        livro.get("preco").getAsDouble(),
-                                        livro.get("ISBN").getAsString(),
-                                        livro.get("editora").getAsString(),
-                                        livro.get("anoPublicacao").getAsInt(),
-                                        livro.get("genero").getAsString(),
-                                        livro.get("autor").getAsString());
+        Livro objetoLivro = new Livro(livro.get("codigo").getAsString(), livro.get("qtdEmEstoque").getAsInt(),
+                livro.get("nome").getAsString(), livro.get("preco").getAsDouble(), livro.get("ISBN").getAsString(),
+                livro.get("editora").getAsString(), livro.get("anoPublicacao").getAsInt(),
+                livro.get("genero").getAsString(), livro.get("autor").getAsString());
 
         return objetoLivro;
     }
@@ -433,10 +412,8 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
     public List<Produto> instanciarHQJson(File caminhoArquivo) {
 
         List<Produto> instanciaLivros = new ArrayList<>();
-        
-        try (
-            FileReader leitor = new FileReader(caminhoArquivo);
-        ) {
+
+        try (FileReader leitor = new FileReader(caminhoArquivo);) {
             if (caminhoArquivo.length() > 0) {
                 Object objeto = JsonParser.parseReader(leitor);
                 JsonArray listaLivros = (JsonArray) objeto;
@@ -448,21 +425,15 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return instanciaLivros;
     }
-    
+
     public HQ parseHQ(JsonObject livro) {
-        HQ objetoHQ = new HQ(
-                                        livro.get("codigo").getAsString(),
-                                        livro.get("qtdEmEstoque").getAsInt(),
-                                        livro.get("nome").getAsString(),
-                                        livro.get("preco").getAsDouble(),
-                                        livro.get("ISBN").getAsString(),
-                                        livro.get("editora").getAsString(),
-                                        livro.get("anoPublicacao").getAsInt(),
-                                        livro.get("genero").getAsString(),
-                                        livro.get("autor").getAsString());
+        HQ objetoHQ = new HQ(livro.get("codigo").getAsString(), livro.get("qtdEmEstoque").getAsInt(),
+                livro.get("nome").getAsString(), livro.get("preco").getAsDouble(), livro.get("ISBN").getAsString(),
+                livro.get("editora").getAsString(), livro.get("anoPublicacao").getAsInt(),
+                livro.get("genero").getAsString(), livro.get("autor").getAsString());
 
         return objetoHQ;
     }
@@ -471,9 +442,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
         List<Produto> instanciaBebidas = new ArrayList<>();
 
-        try (
-            FileReader leitor = new FileReader(caminhoArquivo);
-        ) {
+        try (FileReader leitor = new FileReader(caminhoArquivo);) {
             // Testa se todos os produtos foram excluídos
             if (caminhoArquivo.length() > 0) {
                 Object objeto = JsonParser.parseReader(leitor);
@@ -491,11 +460,8 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
     }
 
     public Bebida parseBebida(JsonObject bebida) {
-        Bebida objetoBebida = new Bebida(
-                                bebida.get("codigo").getAsString(), 
-                                bebida.get("qtdEmEstoque").getAsInt(), 
-                                bebida.get("nome").getAsString(), 
-                                bebida.get("preco").getAsDouble());
+        Bebida objetoBebida = new Bebida(bebida.get("codigo").getAsString(), bebida.get("qtdEmEstoque").getAsInt(),
+                bebida.get("nome").getAsString(), bebida.get("preco").getAsDouble());
 
         return objetoBebida;
     }
@@ -503,15 +469,13 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
     public List<Produto> instanciarAcompanhamentoJson(File caminhoArquivo) {
         List<Produto> instanciaAcompanhamentos = new ArrayList<>();
 
-        try (
-            FileReader leitor = new FileReader(caminhoArquivo);
-        ) {
+        try (FileReader leitor = new FileReader(caminhoArquivo);) {
             // Testa se todos os produtos foram excluídos
             if (caminhoArquivo.length() > 0) {
                 if (JsonParser.parseReader(leitor) != null) {
                     Object objeto = JsonParser.parseReader(leitor);
                     JsonArray listaAcompanhamento = (JsonArray) objeto;
-                    
+
                     for (JsonElement acompanhamentos : listaAcompanhamento) {
                         instanciaAcompanhamentos.add(parseAcompanhamento((JsonObject) acompanhamentos));
                     }
@@ -524,62 +488,60 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
     }
 
     public Acompanhamento parseAcompanhamento(JsonObject acompanhamento) {
-        Acompanhamento objetoAcompanhamento = new Acompanhamento(
-                                    acompanhamento.get("codigo").getAsString(), 
-                                    acompanhamento.get("qtdEmEstoque").getAsInt(), 
-                                    acompanhamento.get("nome").getAsString(), 
-                                    acompanhamento.get("preco").getAsDouble());
+        Acompanhamento objetoAcompanhamento = new Acompanhamento(acompanhamento.get("codigo").getAsString(),
+                acompanhamento.get("qtdEmEstoque").getAsInt(), acompanhamento.get("nome").getAsString(),
+                acompanhamento.get("preco").getAsDouble());
 
         return objetoAcompanhamento;
     }
 
     public void instanciarProdutoJson(File caminhoArquivo) {
-        
+
         List<Produto> instancias = new ArrayList<>();
 
         try (
 
-            FileReader acessoArquivo = new FileReader(caminhoArquivo);
-            BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
-            
+                FileReader acessoArquivo = new FileReader(caminhoArquivo);
+                BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
+
         ) {
 
-                switch (caminhoArquivo.getName()) {
-                    case "livros.json":
-                        instancias = instanciarLivroJson(caminhoArquivo);
-                        for (Produto produto : instancias) {
-                            setProdutos(produto);
-                        }
-                        break;
-                    case "hqs.json":
-                        instancias = instanciarHQJson(caminhoArquivo);
-                        for (Produto produto : instancias) {
-                            setProdutos(produto);
-                        }
-                        break;
-                    case "bebidas.json":
-                        instancias = instanciarBebidaJson(caminhoArquivo);
-                        for (Produto produto : instancias) {
-                            setProdutos(produto);
-                        }
-                        break;
-                    case "acompanhamentos.json":
-                        instancias = instanciarAcompanhamentoJson(caminhoArquivo);
-                        for (Produto produto : instancias) {
-                            setProdutos(produto);
-                        }
-                        break;
-                    default:
-                        break;
+            switch (caminhoArquivo.getName()) {
+                case "livros.json":
+                    instancias = instanciarLivroJson(caminhoArquivo);
+                    for (Produto produto : instancias) {
+                        setProdutos(produto);
+                    }
+                    break;
+                case "hqs.json":
+                    instancias = instanciarHQJson(caminhoArquivo);
+                    for (Produto produto : instancias) {
+                        setProdutos(produto);
+                    }
+                    break;
+                case "bebidas.json":
+                    instancias = instanciarBebidaJson(caminhoArquivo);
+                    for (Produto produto : instancias) {
+                        setProdutos(produto);
+                    }
+                    break;
+                case "acompanhamentos.json":
+                    instancias = instanciarAcompanhamentoJson(caminhoArquivo);
+                    for (Produto produto : instancias) {
+                        setProdutos(produto);
+                    }
+                    break;
+                default:
+                    break;
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
+
     public boolean excluirProdutoTxt(File caminhoDiretorio, String codigo) {
-        List <String> arquivosProdutos = new ArrayList<>();
+        List<String> arquivosProdutos = new ArrayList<>();
         percorrerArquivosEmPasta(caminhoDiretorio, arquivosProdutos);
 
         Produto produtoExcluido;
@@ -588,14 +550,12 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         for (String caminhoArquivo : arquivosProdutos) {
             File arquivo = new File(caminhoDiretorio + "/" + caminhoArquivo);
 
-            try (
-                FileReader leitor = new FileReader(arquivo);
-                BufferedReader buffer = new BufferedReader(leitor);
-            ) {
-                // A primeira linha do arquivo é um identificador pra representar o tipo de produto
-                buffer.readLine(); 
-                
-                if (buffer.readLine().equals(codigo))  {
+            try (FileReader leitor = new FileReader(arquivo); BufferedReader buffer = new BufferedReader(leitor);) {
+                // A primeira linha do arquivo é um identificador pra representar o tipo de
+                // produto
+                buffer.readLine();
+
+                if (buffer.readLine().equals(codigo)) {
                     // Encontrando Produto pelo código passado
                     produtoExcluido = buscarProduto(codigo);
                     // Copiando produto para a pasta de produtos excluídos
@@ -610,9 +570,9 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
                 e.printStackTrace();
             }
         }
-        
+
         return excluirArquivo(arquivoExclusao);
-    }   
+    }
 
     public boolean excluirProdutoJson(File caminhoPasta, String codigo) {
         JsonArray arrayProdutos = new JsonArray();
@@ -623,17 +583,15 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
         for (String caminhoArquivo : arquivosProdutos) {
             File arquivoProduto = new File(caminhoPasta + "/" + caminhoArquivo);
-            try (
-                FileReader leitor = new FileReader(arquivoProduto);
-                FileWriter writer = new FileWriter(arquivoProduto);
-                PrintWriter printer = new PrintWriter(writer);
-            ) {
+            try (FileReader leitor = new FileReader(arquivoProduto);
+                    FileWriter writer = new FileWriter(arquivoProduto);
+                    PrintWriter printer = new PrintWriter(writer);) {
                 // O arquivo do produto pode já estar vazio
                 if (arquivoProduto.length() > 0) {
                     Object objeto = JsonParser.parseReader(leitor);
                     arrayProdutos = (JsonArray) objeto;
-                    
-                    for(int i = 0; i < arrayProdutos.size() ; i++) {
+
+                    for (int i = 0; i < arrayProdutos.size(); i++) {
                         JsonObject objProduto = (JsonObject) arrayProdutos.get(i);
                         if (objProduto.get("codigo").getAsString().equals(codigo)) {
                             arrayProdutos.remove(i);
@@ -643,16 +601,12 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
                             }
                         }
                     }
-                    /* for(int i = 0; i < produtos.size() ; i++) {
-                        produto = (JsonObject) arrayProdutos.get(i);
-                        if (produto.get("codigo").getAsString().equals(codigo)) {
-                            System.out.println(produto.toString());
-                            produtos.remove(i);
-                            if (produtos != null)
-                                printer.print(produtos.toString());
-                            return true;
-                        }
-                    }*/
+                    /*
+                     * for(int i = 0; i < produtos.size() ; i++) { produto = (JsonObject)
+                     * arrayProdutos.get(i); if (produto.get("codigo").getAsString().equals(codigo))
+                     * { System.out.println(produto.toString()); produtos.remove(i); if (produtos !=
+                     * null) printer.print(produtos.toString()); return true; } }
+                     */
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -660,7 +614,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         }
         return false;
     }
-    
+
     public Produto buscarProduto(String codigo) {
 
         for (Produto produto : getProdutos()) {
