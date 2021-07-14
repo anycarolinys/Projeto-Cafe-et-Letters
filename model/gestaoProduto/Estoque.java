@@ -1,6 +1,7 @@
 package model.gestaoProdutos;
 
 import java.util.*;
+
 import java.io.*;
 
 import com.google.gson.JsonArray;
@@ -34,6 +35,16 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         }
     }
 
+    public Produto buscarProduto(String codigo) {
+
+        for (Produto produto : getProdutos()) {
+            if (produto.getCodigo().equals(codigo)) {
+                return produto;
+            }
+        }
+        return null;
+    }
+
     public void inicializarEstoque() {
         getProdutos().clear();
 
@@ -43,7 +54,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         percorrerArquivosEmPasta(produtosEmTxt, arquivosTxt);
 
         for (String caminhoArquivo : arquivosTxt) {
-            instanciarProdutoArquivo(produtosEmTxt + "/" + caminhoArquivo);
+            instanciarProdutoTexto(produtosEmTxt + "/" + caminhoArquivo);
         }
 
         List<String> arquivosJson = new ArrayList<>();
@@ -56,7 +67,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         }
     }
 
-    public void instanciarProdutoArquivo(String caminhoArquivo) {
+    public void instanciarProdutoTexto(String caminhoArquivo) {
 
         Livraria produtoLivraria;
         Bebida bebida;
@@ -68,25 +79,24 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
                 BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
 
         ) {
-            String conteudo = "";
             // Lendo o tipo de produto a ser instanciado
-            conteudo = leitorArquivo.readLine();
+            String conteudo = leitorArquivo.readLine();
 
             switch (conteudo.toLowerCase()) {
                 case "livro":
-                    produtoLivraria = instanciarLivroArquivo(caminhoArquivo);
+                    produtoLivraria = instanciarLivroTexto(caminhoArquivo);
                     setProdutos(produtoLivraria);
                     break;
                 case "hq":
-                    produtoLivraria = instanciarHQArquivo(caminhoArquivo);
+                    produtoLivraria = instanciarHQTexto(caminhoArquivo);
                     setProdutos(produtoLivraria);
                     break;
                 case "bebida":
-                    bebida = instanciarBebidaArquivo(caminhoArquivo);
+                    bebida = instanciarBebidaTexto(caminhoArquivo);
                     setProdutos(bebida);
                     break;
                 case "acompanhamento":
-                    acompanhamento = instanciarAcompanhamentoArquivo(caminhoArquivo);
+                    acompanhamento = instanciarAcompanhamentoTexto(caminhoArquivo);
                     setProdutos(acompanhamento);
                     break;
                 default:
@@ -98,7 +108,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         }
     }
 
-    public File procurarArquivoProduto(File caminhoDiretorio, String codigo) throws FileNotFoundException {
+    public File procurarTextoProduto(File caminhoDiretorio, String codigo) throws FileNotFoundException {
 
         List<String> arquivosProdutos = new ArrayList<>();
         percorrerArquivosEmPasta(caminhoDiretorio, arquivosProdutos);
@@ -120,7 +130,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         return arquivo;
     }
 
-    public Livro instanciarLivroArquivo(String caminhoArquivo) {
+    public Livro instanciarLivroTexto(String caminhoArquivo) {
 
         Livro livro = new Livro();
 
@@ -152,7 +162,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         return livro;
     }
 
-    public HQ instanciarHQArquivo(String caminhoArquivo) {
+    public HQ instanciarHQTexto(String caminhoArquivo) {
 
         HQ hq = new HQ();
 
@@ -176,7 +186,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         return hq;
     }
 
-    public Bebida instanciarBebidaArquivo(String caminhoArquivo) {
+    public Bebida instanciarBebidaTexto(String caminhoArquivo) {
 
         Bebida bebida = new Bebida();
 
@@ -196,18 +206,14 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
             conteudo = leitorArquivo.readLine();
             bebida.setPreco(Double.parseDouble(conteudo));
 
-            /*
-             * conteudo = leitorArquivo.readLine(); bebida.setTipoBebida(conteudo);
-             */
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return bebida;
     }
 
-    public Acompanhamento instanciarAcompanhamentoArquivo(String caminhoArquivo) {
+    public Acompanhamento instanciarAcompanhamentoTexto(String caminhoArquivo) {
 
         Acompanhamento acompanhamento = new Acompanhamento();
 
@@ -227,12 +233,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
             conteudo = leitorArquivo.readLine();
             acompanhamento.setPreco(Double.parseDouble(conteudo));
 
-            /*
-             * conteudo = leitorArquivo.readLine();
-             * acompanhamento.setTipoAcompanhamento(conteudo);
-             */
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -318,8 +319,6 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
             printer.println(Integer.toString(acompanhamento.getQtdEmEstoque()));
             printer.println(acompanhamento.getNome());
             printer.print(Double.toString(acompanhamento.getPreco()));
-            // printer.println(acompanhamento.getValidade());
-            // printer.print(acompanhamento.getTipoAcompanhamento());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -346,8 +345,6 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
             printer.println(Integer.toString(bebida.getQtdEmEstoque()));
             printer.println(bebida.getNome());
             printer.print(Double.toString(bebida.getPreco()));
-            // printer.println(bebida.getValidade());
-            // printer.print(bebida.getTipoBebida());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -384,56 +381,65 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
         List<Produto> instanciaLivros = new ArrayList<>();
 
-        try (FileReader leitor = new FileReader(caminhoArquivo);) {
-            if (caminhoArquivo.length() > 0) {
+        if (caminhoArquivo.length() > 0) {
+            try (FileReader leitor = new FileReader(caminhoArquivo);) {
                 Object objeto = JsonParser.parseReader(leitor);
-                JsonArray listaLivros = (JsonArray) objeto;
+                JsonArray arrayJson = (JsonArray) objeto;
 
-                for (JsonElement livros : listaLivros) {
-                    instanciaLivros.add(parseLivro((JsonObject) livros));
+                JsonObject dados;
+
+                for (JsonElement livro : arrayJson) {
+                    dados = (JsonObject) livro;
+                    instanciaLivros.add(parseLivro((JsonObject) dados));
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return instanciaLivros;
     }
 
     public Livro parseLivro(JsonObject livro) {
-        Livro objetoLivro = new Livro(livro.get("codigo").getAsString(), livro.get("qtdEmEstoque").getAsInt(),
-                livro.get("nome").getAsString(), livro.get("preco").getAsDouble(), livro.get("ISBN").getAsString(),
-                livro.get("editora").getAsString(), livro.get("anoPublicacao").getAsInt(),
-                livro.get("genero").getAsString(), livro.get("autor").getAsString());
+        JsonObject jsonLivro = (JsonObject) livro.get("livro");
+
+        Livro objetoLivro = new Livro(jsonLivro.get("codigo").getAsString(), jsonLivro.get("qtdEmEstoque").getAsInt(),
+                jsonLivro.get("nome").getAsString(), jsonLivro.get("preco").getAsDouble(),
+                jsonLivro.get("ISBN").getAsString(), jsonLivro.get("editora").getAsString(),
+                jsonLivro.get("anoPublicacao").getAsInt(), jsonLivro.get("genero").getAsString(),
+                jsonLivro.get("autor").getAsString());
 
         return objetoLivro;
     }
 
     public List<Produto> instanciarHQJson(File caminhoArquivo) {
+        List<Produto> instanciaHQs = new ArrayList<>();
 
-        List<Produto> instanciaLivros = new ArrayList<>();
-
-        try (FileReader leitor = new FileReader(caminhoArquivo);) {
-            if (caminhoArquivo.length() > 0) {
+        if (caminhoArquivo.length() > 0) {
+            try (FileReader leitor = new FileReader(caminhoArquivo);) {
                 Object objeto = JsonParser.parseReader(leitor);
-                JsonArray listaLivros = (JsonArray) objeto;
+                JsonArray arrayJson = (JsonArray) objeto;
 
-                for (JsonElement livros : listaLivros) {
-                    instanciaLivros.add(parseHQ((JsonObject) livros));
+                JsonObject dados;
+
+                for (JsonElement HQ : arrayJson) {
+                    dados = (JsonObject) HQ;
+                    instanciaHQs.add(parseHQ((JsonObject) dados));
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
-        return instanciaLivros;
+        return instanciaHQs;
     }
 
-    public HQ parseHQ(JsonObject livro) {
-        HQ objetoHQ = new HQ(livro.get("codigo").getAsString(), livro.get("qtdEmEstoque").getAsInt(),
-                livro.get("nome").getAsString(), livro.get("preco").getAsDouble(), livro.get("ISBN").getAsString(),
-                livro.get("editora").getAsString(), livro.get("anoPublicacao").getAsInt(),
-                livro.get("genero").getAsString(), livro.get("autor").getAsString());
+    public HQ parseHQ(JsonObject HQ) {
+        JsonObject jsonHQ = (JsonObject) HQ.get("hq");
+
+        HQ objetoHQ = new HQ(jsonHQ.get("codigo").getAsString(), jsonHQ.get("qtdEmEstoque").getAsInt(),
+                jsonHQ.get("nome").getAsString(), jsonHQ.get("preco").getAsDouble(), jsonHQ.get("ISBN").getAsString(),
+                jsonHQ.get("editora").getAsString(), jsonHQ.get("anoPublicacao").getAsInt(),
+                jsonHQ.get("genero").getAsString(), jsonHQ.get("autor").getAsString());
 
         return objetoHQ;
     }
@@ -442,55 +448,61 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
         List<Produto> instanciaBebidas = new ArrayList<>();
 
-        try (FileReader leitor = new FileReader(caminhoArquivo);) {
-            // Testa se todos os produtos foram excluídos
-            if (caminhoArquivo.length() > 0) {
+        if (caminhoArquivo.length() > 0) {
+            try (FileReader leitor = new FileReader(caminhoArquivo);) {
                 Object objeto = JsonParser.parseReader(leitor);
-                JsonArray listaLivros = (JsonArray) objeto;
+                JsonArray arrayJson = (JsonArray) objeto;
+                JsonObject dados;
 
-                for (JsonElement bebidas : listaLivros) {
-                    instanciaBebidas.add(parseBebida((JsonObject) bebidas));
+                for (JsonElement bebida : arrayJson) {
+                    dados = (JsonObject) bebida;
+                    instanciaBebidas.add(parseBebida((JsonObject) dados));
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
         return instanciaBebidas;
     }
 
     public Bebida parseBebida(JsonObject bebida) {
-        Bebida objetoBebida = new Bebida(bebida.get("codigo").getAsString(), bebida.get("qtdEmEstoque").getAsInt(),
-                bebida.get("nome").getAsString(), bebida.get("preco").getAsDouble());
+
+        JsonObject jsonBebida = (JsonObject) bebida.get("bebida");
+
+        Bebida objetoBebida = new Bebida(jsonBebida.get("codigo").getAsString(),
+                jsonBebida.get("qtdEmEstoque").getAsInt(), jsonBebida.get("nome").getAsString(),
+                jsonBebida.get("preco").getAsDouble());
 
         return objetoBebida;
     }
 
     public List<Produto> instanciarAcompanhamentoJson(File caminhoArquivo) {
+
         List<Produto> instanciaAcompanhamentos = new ArrayList<>();
 
-        try (FileReader leitor = new FileReader(caminhoArquivo);) {
-            // Testa se todos os produtos foram excluídos
-            if (caminhoArquivo.length() > 0) {
-                if (JsonParser.parseReader(leitor) != null) {
-                    Object objeto = JsonParser.parseReader(leitor);
-                    JsonArray listaAcompanhamento = (JsonArray) objeto;
+        if (caminhoArquivo.length() > 0) {
+            try (FileReader leitor = new FileReader(caminhoArquivo);) {
+                Object objeto = JsonParser.parseReader(leitor);
+                JsonArray arrayJson = (JsonArray) objeto;
+                JsonObject dados;
 
-                    for (JsonElement acompanhamentos : listaAcompanhamento) {
-                        instanciaAcompanhamentos.add(parseAcompanhamento((JsonObject) acompanhamentos));
-                    }
+                for (JsonElement acompanhamento : arrayJson) {
+                    dados = (JsonObject) acompanhamento;
+                    instanciaAcompanhamentos.add(parseAcompanhamento((JsonObject) dados));
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return instanciaAcompanhamentos;
     }
 
     public Acompanhamento parseAcompanhamento(JsonObject acompanhamento) {
-        Acompanhamento objetoAcompanhamento = new Acompanhamento(acompanhamento.get("codigo").getAsString(),
-                acompanhamento.get("qtdEmEstoque").getAsInt(), acompanhamento.get("nome").getAsString(),
-                acompanhamento.get("preco").getAsDouble());
+        JsonObject jsonAcompanhamento = (JsonObject) acompanhamento.get("acompanhamento");
+
+        Acompanhamento objetoAcompanhamento = new Acompanhamento(jsonAcompanhamento.get("codigo").getAsString(),
+                jsonAcompanhamento.get("qtdEmEstoque").getAsInt(), jsonAcompanhamento.get("nome").getAsString(),
+                jsonAcompanhamento.get("preco").getAsDouble());
 
         return objetoAcompanhamento;
     }
@@ -540,7 +552,13 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
         }
     }
 
-    public boolean excluirProdutoTxt(File caminhoDiretorio, String codigo) {
+    private boolean excluirArquivoTxt(File caminhoArquivo) {
+        if (caminhoArquivo == null)
+            return false;
+        return caminhoArquivo.delete();
+    }
+
+    public boolean excluirProdutoTexto(File caminhoDiretorio, String codigo) {
         List<String> arquivosProdutos = new ArrayList<>();
         percorrerArquivosEmPasta(caminhoDiretorio, arquivosProdutos);
 
@@ -571,63 +589,64 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
             }
         }
 
-        return excluirArquivo(arquivoExclusao);
+        return excluirArquivoTxt(arquivoExclusao);
     }
 
-    public boolean excluirProdutoJson(File caminhoPasta, String codigo) {
-        JsonArray arrayProdutos = new JsonArray();
+    private void escreverJsonExcluido(String conteudo) {
+        File produtosExcluidos = new File("./src/model/gestaoProdutos/produtosExcluidos");
 
-        List<String> arquivosProdutos = new ArrayList<>();
+        String nomeArquivo = Integer.toString(conteudo.hashCode());
 
-        percorrerArquivosEmPasta(caminhoPasta, arquivosProdutos);
+        try (FileWriter writer = new FileWriter(produtosExcluidos.getPath() + "/" + nomeArquivo + ".json");
+                PrintWriter printer = new PrintWriter(writer);) {
+            printer.print(conteudo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        for (String caminhoArquivo : arquivosProdutos) {
-            File arquivoProduto = new File(caminhoPasta + "/" + caminhoArquivo);
-            try (FileReader leitor = new FileReader(arquivoProduto);
-                    FileWriter writer = new FileWriter(arquivoProduto);
-                    PrintWriter printer = new PrintWriter(writer);) {
-                // O arquivo do produto pode já estar vazio
-                if (arquivoProduto.length() > 0) {
-                    Object objeto = JsonParser.parseReader(leitor);
-                    arrayProdutos = (JsonArray) objeto;
+    private boolean excluirEmJson(String tipo, JsonArray array, String codigo) {
+        JsonObject dados, produtos;
 
-                    for (int i = 0; i < arrayProdutos.size(); i++) {
-                        JsonObject objProduto = (JsonObject) arrayProdutos.get(i);
-                        if (objProduto.get("codigo").getAsString().equals(codigo)) {
-                            arrayProdutos.remove(i);
-                            if (arrayProdutos.size() > 0) {
-                                printer.print(arrayProdutos.toString());
-                                return true;
-                            }
-                        }
-                    }
-                    /*
-                     * for(int i = 0; i < produtos.size() ; i++) { produto = (JsonObject)
-                     * arrayProdutos.get(i); if (produto.get("codigo").getAsString().equals(codigo))
-                     * { System.out.println(produto.toString()); produtos.remove(i); if (produtos !=
-                     * null) printer.print(produtos.toString()); return true; } }
-                     */
-                }
+        for (JsonElement produto : array) {
+            dados = (JsonObject) produto;
+            produtos = (JsonObject) dados.get(tipo);
+            if (produtos.get("codigo").getAsString().equals(codigo)) {
+                escreverJsonExcluido(produtos.toString());
+                array.remove(dados);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private JsonArray lerJson(File caminhoArquivo) {
+        JsonArray arrayJson = null;
+
+        if (caminhoArquivo.length() > 0) {
+            try (FileReader leitor = new FileReader(caminhoArquivo);) {
+                Object objeto = JsonParser.parseReader(leitor);
+                arrayJson = (JsonArray) objeto;
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return false;
+
+        return arrayJson;
     }
 
-    public Produto buscarProduto(String codigo) {
+    public void excluirProdutoJson(File caminhoPasta, String codigo, String tipo) {
+        JsonArray array = lerJson(new File(caminhoPasta + "/" + tipo + ".json"));
+        excluirEmJson(tipo, array, codigo);
 
-        for (Produto produto : getProdutos()) {
-            if (produto.getCodigo().equals(codigo)) {
-                return produto;
-            }
+        try (FileWriter writer = new FileWriter(caminhoPasta + "/" + tipo + ".json");
+                PrintWriter printer = new PrintWriter(writer);) {
+            printer.print(array.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return null;
     }
 
-    public boolean excluirArquivo(File caminhoArquivo) {
-        if (caminhoArquivo == null)
-            return false;
-        return caminhoArquivo.delete();
-    }
 }
