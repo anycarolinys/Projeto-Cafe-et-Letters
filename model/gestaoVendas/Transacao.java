@@ -10,6 +10,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class Transacao {
 
     public Transacao() {
@@ -49,16 +54,23 @@ public class Transacao {
             cadastroCompra(diretorioCliente, cliente, compra);
             cliente.setCompras(compra);
 
-            alterarProdutoEstoque(compra.getProduto(), compra.getQuantidadeProduto());
+            if (!alterarArquivoTexto(compra.getProduto(), compra.getQuantidadeProduto())) {
+                System.out.println("está em Json!");
+                alterarArquivoJson(compra.getProduto(), compra.getQuantidadeProduto());
+            }
+
         } else {
             System.out.println("Cliente não cadastrado!");
-            System.out.println(compra.getProduto().getNome());
+            // System.out.println(compra.getProduto().getNome());
             diretorioCliente = criarDiretorioCliente(diretorioCompras, cliente);
-            
+
             cadastroCompra(diretorioCliente, cliente, compra);
             cliente.setCompras(compra);
-            
-            alterarProdutoEstoque(compra.getProduto(), compra.getQuantidadeProduto());
+
+            if (!alterarArquivoTexto(compra.getProduto(), compra.getQuantidadeProduto())) {
+                System.out.println("está em Json!");
+                alterarArquivoJson(compra.getProduto(), compra.getQuantidadeProduto());
+            }
         }
     }
 
@@ -87,7 +99,7 @@ public class Transacao {
 
     }
 
-    public void percorrerArquivosEmPasta(File pasta, List<String> arquivosDeProdutos) {
+    private void percorrerArquivosEmPasta(File pasta, List<String> arquivosDeProdutos) {
 
         for (File arquivo : pasta.listFiles()) {
             if (!arquivo.isDirectory()) {
@@ -96,18 +108,10 @@ public class Transacao {
                 percorrerArquivosEmPasta(arquivo, arquivosDeProdutos);
             }
         }
-
-        /*
-         * File[] arquivo = pasta.listFiles();
-         * 
-         * for (int i = 0; i < pasta.listFiles().length; i++) { if
-         * (!arquivo[i].isDirectory()) { arquivosDeProdutos.add(arquivo[i].getName()); }
-         * else { percorrerArquivosEmPasta(arquivo[i], arquivosDeProdutos); } }
-         */
     }
 
-    private void alterarProdutoEstoque(Produto produto, int qtdComprada) {
-        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados");
+    private boolean alterarArquivoTexto(Produto produto, int qtdComprada) {
+        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados/produtosTxt");
 
         List<String> arquivosProdutos = new ArrayList<>();
         percorrerArquivosEmPasta(diretorioProdutos, arquivosProdutos);
@@ -119,16 +123,19 @@ public class Transacao {
             ) {
                 leitorArquivo.readLine();
 
-                if (leitorArquivo.readLine().equals(produto.getCodigo()))
+                if (leitorArquivo.readLine().equals(produto.getCodigo())) {
                     diminuirEstoque(diretorioProdutos.getPath() + "/" + arquivoProduto, qtdComprada);
+                    return true;
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        return false;
     }
 
-    public static void diminuirEstoque(String caminhoArquivo, int qtdComprada) {
+    private void diminuirEstoque(String caminhoArquivo, int qtdComprada) {
 
         try {
             Path path = Paths.get(caminhoArquivo);
@@ -142,5 +149,83 @@ public class Transacao {
             e.printStackTrace();
         }
 
+    }
+
+    private JsonArray lerJson(File caminhoArquivo) {
+        JsonArray arrayJson = null;
+
+        if (caminhoArquivo.length() > 0) {
+            try (FileReader leitor = new FileReader(caminhoArquivo);) {
+                Object objeto = JsonParser.parseReader(leitor);
+                arrayJson = (JsonArray) objeto;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return arrayJson;
+    }
+
+    private boolean temProdutoJson(JsonArray array, String codigo, String tipoProduto) {
+
+        JsonObject dados, produtos;
+
+        for (JsonElement produto : array) {
+            dados = (JsonObject) produto;
+            produtos = (JsonObject) dados.get(tipoProduto);
+
+            if (produtos.get("codigo").getAsString().equals(codigo))
+                return true;
+        }
+        return false;
+    }
+
+    private void alterarEstoqueJson(JsonArray array, String codigo, int qtdComprada, String tipoProduto) {
+
+        JsonObject dados, produtos;
+
+        for (JsonElement produto : array) {
+            dados = (JsonObject) produto;
+            produtos = (JsonObject) dados.get(tipoProduto);
+
+            if (produtos.get("codigo").getAsString().equals(codigo)) {
+                System.out.println(produtos.toString());
+                int qtdEmEstoque = produtos.get("qtdEmEstoque").getAsInt();
+                qtdEmEstoque -= qtdComprada;
+                produtos.addProperty("qtdEmEstoque", qtdEmEstoque);
+            }
+        }
+    }
+
+    private void alterarArquivoJson(Produto produto, int qtdComprada) {
+        File pastaJson = new File("./src/model/gestaoProdutos/produtosCadastrados/produtosJson");
+
+        List<String> arquivosDeProdutos = new ArrayList<>();
+        percorrerArquivosEmPasta(pastaJson, arquivosDeProdutos);
+
+        for (String arquivo : arquivosDeProdutos) {
+            File arquivoProduto = new File(pastaJson.getPath() + "/" + arquivo);
+            JsonArray array = lerJson(arquivoProduto);
+
+            String tipoProduto = "";
+            char[] tipo = arquivo.toCharArray();
+
+            for (int i = 0; tipo[i] != '.' && i < tipo.length; i++) {
+                tipoProduto += tipo[i];
+            }
+
+            if (temProdutoJson(array, produto.getCodigo(), tipoProduto)) {
+                System.out.println("eh um produto " + tipoProduto);
+                alterarEstoqueJson(array, produto.getCodigo(), qtdComprada, tipoProduto);
+
+                try (FileWriter writer = new FileWriter(arquivoProduto);
+                        PrintWriter printer = new PrintWriter(writer);) {
+                    printer.print(array.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 }
