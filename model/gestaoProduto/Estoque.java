@@ -10,6 +10,7 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
     List<Produto> produtos;
     List<String> produtosCadastrados;
+    // List<String> produtosForaEstoque;
 
     public Estoque() {
         this.produtos = new ArrayList<>();
@@ -613,7 +614,9 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
             dados = (JsonObject) produto;
             produtos = (JsonObject) dados.get(tipo);
             if (produtos.get("codigo").getAsString().equals(codigo)) {
+                // String conteudo = "{\"" +  tipo + "\":" + produtos.toString() + "}";
                 escreverJsonExcluido(produtos.toString());
+                // escreverJsonExcluido(conteudo);
                 array.remove(dados);
                 return true;
             }
@@ -714,4 +717,41 @@ public class Estoque implements ArquivosTexto, ArquivosJson {
 
         return nomeProdutos;
     }
+
+    public List<String> listarProdutosForaEstoque() {
+        List<String> nomeProdutos = new ArrayList<>();
+        File arquivosForaEstoque = new File("./src/model/gestaoProdutos/produtosForaEstoque");
+
+        List<String> nomeArquivos = new ArrayList<>();
+
+        percorrerArquivosEmPasta(arquivosForaEstoque, nomeArquivos);
+
+        for (String caminhoArquivo : nomeArquivos) {
+            try (
+                FileReader leitor = new FileReader(arquivosForaEstoque.getPath() + "/" + caminhoArquivo);
+                BufferedReader buffer = new BufferedReader(leitor);
+            ) {
+                buffer.readLine(); // Categoria do Produto
+                buffer.readLine(); // Codigo do produto
+                nomeProdutos.add(buffer.readLine()); // Nome do produto
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return nomeProdutos;
+    }
+
+    public List<String> listarLivros() {
+        List<String> nomeLivros = new ArrayList<>();
+        
+        for (Produto produto : getProdutos()) {
+            if(produto.getClass().getSimpleName().equalsIgnoreCase("Livro")) {
+                nomeLivros.add(produto.getNome());
+            }
+        }
+        return nomeLivros;
+    }
+
+    /* public List<String> listarProdutosCategoria() {
+    } */
 }
