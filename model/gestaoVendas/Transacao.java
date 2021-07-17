@@ -20,6 +20,17 @@ public class Transacao {
     public Transacao() {
     }
 
+    private void percorrerArquivosEmPasta(File pasta, List<String> arquivosDeProdutos) {
+
+        for (File arquivo : pasta.listFiles()) {
+            if (!arquivo.isDirectory()) {
+                arquivosDeProdutos.add(arquivo.getName());
+            } else {
+                percorrerArquivosEmPasta(arquivo, arquivosDeProdutos);
+            }
+        }
+    }
+
     public File criarDiretorioCliente(File diretorioCompra, Cliente cliente) {
         File diretorioCliente = new File(diretorioCompra.getPath() + "/" + cliente.getCPF());
         diretorioCliente.mkdir();
@@ -41,37 +52,51 @@ public class Transacao {
         return pastaCliente;
     }
 
-    public void cadastrarCompra(Cliente cliente, Compra compra) {
+    // Ao fim do cadastro de uma compra o estoque deve ser atualizado com a função
+    // 'inicializarEstoque()'
+    // da classe Estoque
+    public boolean cadastrarCompra(Cliente cliente, Compra compra) {
 
         boolean isCadastrado = cliente.isCadastrado();
         File diretorioCompras = new File("./src/model/gestaoClientes/comprasCadastradas");
         File diretorioCliente;
 
-        if (isCadastrado) {
-            System.out.println("Cliente cadastrado!");
-            diretorioCliente = new File(diretorioCompras.getPath() + "/" + cliente.getCPF());
+        // Se a quantidade de produtos que o cliente deseja comprar estiver disponivel
+        // no estoque, permitir compra
+        if (compra.getProduto().getQtdEmEstoque() >= compra.getQuantidadeProduto()) {
+            if (isCadastrado) {
+                System.out.println("Cliente cadastrado!");
+                // Acessando diretorio de compras do cliente
+                diretorioCliente = new File(diretorioCompras.getPath() + "/" + cliente.getCPF());
 
-            cadastroCompra(diretorioCliente, cliente, compra);
-            cliente.setCompras(compra);
+                // Cadastrando compra no diretorio do Cliente
+                cadastroCompra(diretorioCliente, cliente, compra);
+                // Adicionando compra no conjunto de compras do Cliente
+                cliente.setCompras(compra);
 
-            if (!alterarArquivoTexto(compra.getProduto(), compra.getQuantidadeProduto())) {
-                System.out.println("está em Json!");
-                alterarArquivoJson(compra.getProduto(), compra.getQuantidadeProduto());
+                // Alterando quantidade do produto em arquivo
+                if (!alterarArquivoTexto(compra.getProduto(), compra.getQuantidadeProduto())) {
+                    alterarArquivoJson(compra.getProduto(), compra.getQuantidadeProduto());
+                }
+            } else {
+                System.out.println("Cliente não cadastrado!");
+                // Criando diretorio de compras para o cliente
+                diretorioCliente = criarDiretorioCliente(diretorioCompras, cliente);
+
+                // Cadastrando compra no diretorio do cliente
+                cadastroCompra(diretorioCliente, cliente, compra);
+                // Adicionando compra no conjunto de compras do Cliente
+                cliente.setCompras(compra);
+
+                // Alterando quantidade do produto em arquivo
+                if (!alterarArquivoTexto(compra.getProduto(), compra.getQuantidadeProduto())) {
+                    alterarArquivoJson(compra.getProduto(), compra.getQuantidadeProduto());
+                }
             }
-
         } else {
-            System.out.println("Cliente não cadastrado!");
-            // System.out.println(compra.getProduto().getNome());
-            diretorioCliente = criarDiretorioCliente(diretorioCompras, cliente);
-
-            cadastroCompra(diretorioCliente, cliente, compra);
-            cliente.setCompras(compra);
-
-            if (!alterarArquivoTexto(compra.getProduto(), compra.getQuantidadeProduto())) {
-                System.out.println("está em Json!");
-                alterarArquivoJson(compra.getProduto(), compra.getQuantidadeProduto());
-            }
+            return false;
         }
+        return true;
     }
 
     private void cadastroCompra(File diretorioCliente, Cliente cliente, Compra compra) {
@@ -99,57 +124,80 @@ public class Transacao {
 
     }
 
-    private void percorrerArquivosEmPasta(File pasta, List<String> arquivosDeProdutos) {
+    private void tirarProdutoEstoque(Produto produto) {
 
-        for (File arquivo : pasta.listFiles()) {
-            if (!arquivo.isDirectory()) {
-                arquivosDeProdutos.add(arquivo.getName());
-            } else {
-                percorrerArquivosEmPasta(arquivo, arquivosDeProdutos);
-            }
+        String classeProduto = produto.getClass().getSimpleName().toLowerCase();
+        String nomeArquivo = Integer.toString(produto.hashCode());
+        File arquivoProduto = new File("./src/model/gestaoProdutos/produtosForaEstoque" + "/" + nomeArquivo + ".txt");
+
+        try (FileWriter writer = new FileWriter(arquivoProduto);
+                PrintWriter printer = new PrintWriter(writer);) {
+            printer.println(classeProduto.toUpperCase());
+            printer.println(produto.getCodigo());
+            printer.print(produto.getNome());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private boolean alterarArquivoTexto(Produto produto, int qtdComprada) {
-        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados/produtosTxt");
-
-        List<String> arquivosProdutos = new ArrayList<>();
-        percorrerArquivosEmPasta(diretorioProdutos, arquivosProdutos);
-
-        for (String arquivoProduto : arquivosProdutos) {
-            try (FileReader acessoArquivo = new FileReader(diretorioProdutos.getPath() + "/" + arquivoProduto);
-                    BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
-
-            ) {
-                leitorArquivo.readLine();
-
-                if (leitorArquivo.readLine().equals(produto.getCodigo())) {
-                    diminuirEstoque(diretorioProdutos.getPath() + "/" + arquivoProduto, qtdComprada);
-                    return true;
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-    private void diminuirEstoque(String caminhoArquivo, int qtdComprada) {
+    private boolean diminuirEstoque(String caminhoArquivo, int qtdComprada) {
 
         try {
             Path path = Paths.get(caminhoArquivo);
             List<String> linhas = Files.readAllLines(path);
             int qtdEmEstoque = Integer.parseInt(linhas.get(2));
             qtdEmEstoque -= qtdComprada;
+            
             linhas.remove(2);
             linhas.add(2, Integer.toString(qtdEmEstoque));
             Files.write(path, linhas);
+            // Se a quantidade no produto em Estoque ficar zerada
+            // deve-se mover o arquivo do produto para
+            // 'produtosForaEstoque'
+            if (qtdEmEstoque == 0) {
+                return false;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return true;
     }
+
+    private boolean alterarArquivoTexto(Produto produto, int qtdComprada) {
+        File diretorioProdutos = new File("./src/model/gestaoProdutos/produtosCadastrados/produtosTxt");
+        boolean alterou = false;
+        List<String> arquivosProdutos = new ArrayList<>();
+        percorrerArquivosEmPasta(diretorioProdutos, arquivosProdutos);
+        File arquivo = null;
+        
+        for (String nomeArquivo : arquivosProdutos) {
+            arquivo = new File(diretorioProdutos.getPath() + "/" + nomeArquivo);
+            try ( 
+                FileReader acessoArquivo = new FileReader(arquivo);
+                BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
+            ) {
+                leitorArquivo.readLine();
+                
+                // Se o produto lido possuir o codigo buscado, diminuir estoque do mesmo
+                if (leitorArquivo.readLine().equals(produto.getCodigo())) {
+                    // Se for retornado 'false' o produto foi zerado no estoque
+                    if(!diminuirEstoque(diretorioProdutos.getPath() + "/" + nomeArquivo, qtdComprada)) {
+                        // Adicionar produto na pasta 'produtosForaEstoque'
+                        tirarProdutoEstoque(produto);
+                        break;
+                    }
+                    alterou = true;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return alterou;
+    }
+
 
     private JsonArray lerJson(File caminhoArquivo) {
         JsonArray arrayJson = null;
@@ -166,6 +214,23 @@ public class Transacao {
         return arrayJson;
     }
 
+
+    private boolean excluirEmJsonArray(String tipo, JsonArray array, String codigo) {
+        JsonObject dados, produtos;
+
+        for (JsonElement produto : array) {
+            dados = (JsonObject) produto;
+            produtos = (JsonObject) dados.get(tipo);
+            if (produtos.get("codigo").getAsString().equals(codigo)) {
+                System.out.println(dados.toString());
+                array.remove(dados);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private boolean temProdutoJson(JsonArray array, String codigo, String tipoProduto) {
 
         JsonObject dados, produtos;
@@ -180,7 +245,7 @@ public class Transacao {
         return false;
     }
 
-    private void alterarEstoqueJson(JsonArray array, String codigo, int qtdComprada, String tipoProduto) {
+    private boolean alterarEstoqueJson(JsonArray array, String codigo, int qtdComprada, String tipoProduto) {
 
         JsonObject dados, produtos;
 
@@ -189,12 +254,15 @@ public class Transacao {
             produtos = (JsonObject) dados.get(tipoProduto);
 
             if (produtos.get("codigo").getAsString().equals(codigo)) {
-                System.out.println(produtos.toString());
                 int qtdEmEstoque = produtos.get("qtdEmEstoque").getAsInt();
                 qtdEmEstoque -= qtdComprada;
                 produtos.addProperty("qtdEmEstoque", qtdEmEstoque);
+                if (qtdEmEstoque == 0) {
+                    return false;
+                }
             }
         }
+        return true;
     }
 
     private void alterarArquivoJson(Produto produto, int qtdComprada) {
@@ -215,8 +283,11 @@ public class Transacao {
             }
 
             if (temProdutoJson(array, produto.getCodigo(), tipoProduto)) {
-                System.out.println("eh um produto " + tipoProduto);
-                alterarEstoqueJson(array, produto.getCodigo(), qtdComprada, tipoProduto);
+                // Se a alteracao retorna falso, o produto foi zerado no estoque
+                if (!alterarEstoqueJson(array, produto.getCodigo(), qtdComprada, tipoProduto)) {
+                    tirarProdutoEstoque(produto);
+                    excluirEmJsonArray(tipoProduto, array, produto.getCodigo());
+                }
 
                 try (FileWriter writer = new FileWriter(arquivoProduto);
                         PrintWriter printer = new PrintWriter(writer);) {
