@@ -57,14 +57,14 @@ public class Transacao {
     // da classe Estoque
     public boolean cadastrarCompra(Cliente cliente, Compra compra) {
 
-        boolean isCadastrado = cliente.isCadastrado();
+        boolean possuiCompras = cliente.possuiCompras();
         File diretorioCompras = new File("./src/model/gestaoClientes/comprasCadastradas");
         File diretorioCliente;
 
         // Se a quantidade de produtos que o cliente deseja comprar estiver disponivel
         // no estoque, permitir compra
         if (compra.getProduto().getQtdEmEstoque() >= compra.getQuantidadeProduto()) {
-            if (isCadastrado) {
+            if (possuiCompras) {
                 System.out.println("Cliente cadastrado!");
                 // Acessando diretorio de compras do cliente
                 diretorioCliente = new File(diretorioCompras.getPath() + "/" + cliente.getCPF());
@@ -75,6 +75,8 @@ public class Transacao {
                 cliente.setCompras(compra);
 
                 // Alterando quantidade do produto em arquivo
+                // Se o arquivo do produto nao for do tipo .txt,
+                // sera do tipo .json
                 if (!alterarArquivoTexto(compra.getProduto(), compra.getQuantidadeProduto())) {
                     alterarArquivoJson(compra.getProduto(), compra.getQuantidadeProduto());
                 }
