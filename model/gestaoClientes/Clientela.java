@@ -20,27 +20,29 @@ public class Clientela implements ArquivosClientes {
         this.clientes.add(cliente);
     }
 
-    public void listarClientesAtivos(){
-        for (Cliente cliente : getClientes()) {
-            System.out.println(cliente.getNome());
-        }
-    }
-
     public void removerCliente(Cliente cliente) {
         getClientes().remove(cliente);
     }
-    
+
+    public void inicializarClientes() {
+        getClientes().clear();
+
+        File diretorioClientes = new File("./src/model/gestaoClientes/clientesCadastrados");
+        List<String> nomeArquivos = new ArrayList<>();
+        percorrerArquivosEmPasta(diretorioClientes, nomeArquivos);
+
+        for (String arquivoCliente : nomeArquivos) {
+            instanciarClienteArquivo(diretorioClientes.getPath() + "/" + arquivoCliente);
+        }
+    }
+
     public void instanciarClienteArquivo(String caminhoArquivo) {
         Cliente cliente = new Cliente();
-        
-        try (
-                FileReader acessoArquivo = new FileReader(caminhoArquivo);
-                BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);
-        ) {
-            
-            cliente = new Cliente(
-                leitorArquivo.readLine(),
-                leitorArquivo.readLine());
+
+        try (FileReader acessoArquivo = new FileReader(caminhoArquivo);
+                BufferedReader leitorArquivo = new BufferedReader(acessoArquivo);) {
+
+            cliente = new Cliente(leitorArquivo.readLine(), leitorArquivo.readLine());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -55,13 +57,11 @@ public class Clientela implements ArquivosClientes {
             diretorioClientes = new File("./src/model/gestaoClientes/clientesCadastrados");
         else
             diretorioClientes = new File("./src/model/gestaoClientes/clientesExcluidos");
-        
+
         String caminhoArquivo = Integer.toString(cliente.hashCode());
 
-        try (
-            FileWriter acessoArquivo = new FileWriter(diretorioClientes + "\\" + caminhoArquivo + ".txt");
-            PrintWriter printer = new PrintWriter(acessoArquivo);
-        ) {
+        try (FileWriter acessoArquivo = new FileWriter(diretorioClientes + "\\" + caminhoArquivo + ".txt");
+                PrintWriter printer = new PrintWriter(acessoArquivo);) {
             printer.println(cliente.getCPF());
             printer.print(cliente.getNome());
         } catch (IOException e) {
@@ -69,21 +69,19 @@ public class Clientela implements ArquivosClientes {
         }
     }
 
-    public File buscarClienteParaExcluir(File caminhoDiretorio, String CPF) throws FileNotFoundException {
+    public void excluirCliente(String CPF) {
 
+        File caminhoDiretorio = new File("./src/model/gestaoClientes/clientesCadastrados");
         List<String> arquivosClientes = new ArrayList<>();
         percorrerArquivosEmPasta(caminhoDiretorio, arquivosClientes);
 
         File arquivo = null;
 
-        Cliente clienteExcluido; 
+        Cliente clienteExcluido;
 
         for (String caminhoArquivo : arquivosClientes) {
             arquivo = new File(caminhoDiretorio + "\\" + caminhoArquivo);
-            try (
-                FileReader leitor = new FileReader(arquivo);
-                BufferedReader buffer = new BufferedReader(leitor);
-            ) {
+            try (FileReader leitor = new FileReader(arquivo); BufferedReader buffer = new BufferedReader(leitor);) {
                 if (buffer.readLine().equals(CPF)) {
                     clienteExcluido = buscarCliente(CPF);
                     instanciarClienteObjeto(clienteExcluido, false);
@@ -94,12 +92,7 @@ public class Clientela implements ArquivosClientes {
                 e.printStackTrace();
             }
         }
-
-        return arquivo;
-    }
-
-    public boolean excluirCliente(File caminhoArquivo) {
-        return caminhoArquivo.delete();
+        arquivo.delete();
     }
 
     public Cliente buscarCliente(String CPF) {
@@ -112,4 +105,58 @@ public class Clientela implements ArquivosClientes {
         return null;
     }
 
+    public List<String> listarClientesCadastrados() {
+        List<String> nomeClientes = new ArrayList<>();
+
+        for (Cliente cliente : getClientes()) {
+            nomeClientes.add(cliente.getNome());
+        }
+        return nomeClientes;
+    }
+
+    public List<String> listarClientesExcluidos() {
+        List<String> nomeClientes = new ArrayList<>();
+        List<String> arquivosClientes = new ArrayList<>();
+        File diretorio = new File("./src/model/gestaoClientes/clientesExcluidos");
+
+        percorrerArquivosEmPasta(diretorio, arquivosClientes);
+        for (String caminhoArquivo : arquivosClientes) {
+            try (FileReader leitorArquivo = new FileReader(diretorio + "/" + caminhoArquivo);
+                    BufferedReader buffer = new BufferedReader(leitorArquivo);) {
+                buffer.readLine(); // CPF do Cliente
+                nomeClientes.add(buffer.readLine()); // Nome do cliente
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return nomeClientes;
+    }
+
+    public List<String> listarComprasClientes(String CPF) {
+        List<String> arquivosCompras = new ArrayList<>();
+        List<String> compras = new ArrayList<>();
+
+        File diretorioCompras = new File("./src/model/gestaoClientes/comprasCadastradas");
+        File[] comprasCliente = diretorioCompras.listFiles();
+
+        for (File pastaCliente : comprasCliente) {
+            if (pastaCliente.getName().equals(CPF)) {
+                percorrerArquivosEmPasta(pastaCliente, compras);
+                for (String nomeArquivo : compras) {
+                    try (FileReader leitor = new FileReader(diretorioCompras.getPath() + "/" + CPF + "/" + nomeArquivo);
+                            BufferedReader buffer = new BufferedReader(leitor);) {
+                        String nomeProduto = buffer.readLine(); // Nome do produto
+                        buffer.readLine(); // Codigo do produto
+                        buffer.readLine(); // Quantidade comprada
+                        String dataHora = buffer.readLine(); // Data e hora da compra
+                        arquivosCompras.add(nomeProduto + " (" + dataHora + ")");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return arquivosCompras;
+    }
 }

@@ -9,7 +9,9 @@ public class Cliente {
     private String nome;
     private List<Compra> compras;
 
-    public Cliente() {}
+    public Cliente() {
+        this.compras = new ArrayList<>();
+    }
 
     public Cliente(String CPF, String nome) {
         this.CPF = CPF;
@@ -47,7 +49,7 @@ public class Cliente {
     public void listarCompras() {
     }
 
-    public boolean isCadastrado() {
+    public boolean possuiCompras() {
         if (getCompras().size() > 0)
                 return true;
         return false;

@@ -1,7 +1,6 @@
 package model.gestaoClientes;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 
 public interface ArquivosClientes {
@@ -20,9 +19,9 @@ public interface ArquivosClientes {
 
     public void instanciarClienteObjeto(Cliente cliente, boolean pasta);
 
-    public File buscarClienteParaExcluir(File caminhoDiretorio, String CPF) throws FileNotFoundException;
+    // public File buscarClienteParaExcluir(File caminhoDiretorio, String CPF) throws FileNotFoundException;
 
-    public boolean excluirCliente(File caminhoArquivo);
+    // public boolean excluirCliente(File caminhoArquivo);
 
     public Cliente buscarCliente(String CPF);
 }
