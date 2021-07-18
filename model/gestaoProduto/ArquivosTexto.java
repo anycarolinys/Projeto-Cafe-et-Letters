@@ -7,8 +7,6 @@ public interface ArquivosTexto {
 
     public Produto buscarProduto(String codigo);
 
-    public void listarProdutosCadastrados();
-
     public void instanciarProdutoTexto(String caminhoArquivo);
 
     public boolean excluirProdutoTexto(File caminhoDiretorio, String codigo);
@@ -31,7 +29,10 @@ public interface ArquivosTexto {
 
     public void instanciarBebidaObjeto(Bebida bebida, boolean pasta);
 
-    public void instanciarProdutoObjeto(Produto produto, boolean pasta);
+    public void cadastrarProduto(Produto produto, boolean pasta);
+
+    // Listar os produtos disponíveis no estoque
+    public List<String> listarProdutosEstoque();
 
     public default void percorrerArquivosEmPasta(File pasta, List<String> arquivosDeProdutos) {
         for (File arquivo : pasta.listFiles()) {
