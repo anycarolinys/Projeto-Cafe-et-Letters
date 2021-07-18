@@ -6,7 +6,7 @@ import java.io.*;
 
 import com.google.gson.*;
 
-public class Estoque implements ArquivosTexto {
+public class Estoque implements ArquivosProdutos {
 
     List<Produto> produtos;
     List<String> produtosCadastrados;
@@ -36,10 +36,11 @@ public class Estoque implements ArquivosTexto {
         getProdutos().remove(produto);
     }
 
-    public void excluirProduto(String codigo, String tipoProduto) {
+    public void excluirProduto(String codigo) {
         if (!excluirProdutoTexto(new File("./src/model/gestaoProdutos/produtosCadastrados/produtosTxt"), codigo)) {
-            excluirProdutoJson(new File("./src/model/gestaoProdutos/produtosCadastrados/produtosJson"), codigo, tipoProduto);
+            excluirProdutoJson(new File("./src/model/gestaoProdutos/produtosCadastrados/produtosJson"), codigo);
         }
+
     }
 
     public Produto buscarProduto(String codigo) {
@@ -263,8 +264,6 @@ public class Estoque implements ArquivosTexto {
 
         return acompanhamento;
     }
-
-
 
     public void cadastrarProduto(Produto produto, boolean pasta) {
 
@@ -589,7 +588,7 @@ public class Estoque implements ArquivosTexto {
         String nomeArquivo = Integer.toString(conteudo.hashCode());
 
         try (FileWriter writer = new FileWriter(produtosExcluidos.getPath() + "/" + nomeArquivo + ".json");
-        PrintWriter printer = new PrintWriter(writer);) {
+                PrintWriter printer = new PrintWriter(writer);) {
             printer.print(conteudo);
         } catch (IOException e) {
             e.printStackTrace();
@@ -603,7 +602,7 @@ public class Estoque implements ArquivosTexto {
             dados = (JsonObject) produto;
             produtos = (JsonObject) dados.get(tipo);
             if (produtos.get("codigo").getAsString().equals(codigo)) {
-                // String conteudo = "{\"" +  tipo + "\":" + produtos.toString() + "}";
+                // String conteudo = "{\"" + tipo + "\":" + produtos.toString() + "}";
                 escreverJsonExcluido(produtos.toString());
                 // escreverJsonExcluido(conteudo);
                 array.remove(dados);
@@ -630,22 +629,49 @@ public class Estoque implements ArquivosTexto {
         return arrayJson;
     }
 
-    private void excluirProdutoJson(File caminhoPasta, String codigo, String tipo) {
-        JsonArray array = lerJson(new File(caminhoPasta + "/" + tipo + ".json"));
-        // JsonArray array = lerJson(new File(caminhoPasta.getPath() + "/" + tipo + ".json"));
-        excluirEmJson(tipo, array, codigo);
+    /*
+     * private void excluirProdutoJson(File caminhoPasta, String codigo, String
+     * tipo) { JsonArray array = lerJson(new File(caminhoPasta + "/" + tipo +
+     * ".json")); // JsonArray array = lerJson(new File(caminhoPasta.getPath() + "/"
+     * + tipo + ".json")); excluirEmJson(tipo, array, codigo);
+     * 
+     * try (FileWriter writer = new FileWriter(caminhoPasta + "/" + tipo + ".json");
+     * PrintWriter printer = new PrintWriter(writer);) {
+     * printer.print(array.toString()); } catch (IOException e) {
+     * e.printStackTrace(); }
+     * 
+     * Produto produtoExcluido = buscarProduto(codigo);
+     * removerProduto(produtoExcluido); }
+     */
 
-        try (FileWriter writer = new FileWriter(caminhoPasta + "/" + tipo + ".json");
-                PrintWriter printer = new PrintWriter(writer);) {
-            printer.print(array.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void excluirProdutoJson(File caminhoPasta, String codigo) {
+
+        List<String> arquivosProdutos = new ArrayList<>();
+        percorrerArquivosEmPasta(caminhoPasta, arquivosProdutos);
+
+        for (String arquivo : arquivosProdutos) {
+            File arquivoProduto = new File(caminhoPasta.getPath() + "/" + arquivo);
+            JsonArray array = lerJson(arquivoProduto);
+
+            String tipoProduto = "";
+            char[] tipo = arquivo.toCharArray();
+
+            for (int i = 0; tipo[i] != '.' && i < tipo.length; i++) {
+                tipoProduto += tipo[i];
+            }
+
+            excluirEmJson(tipoProduto, array, codigo);
+
+            try (FileWriter writer = new FileWriter(caminhoPasta + "/" + tipoProduto + ".json");
+                    PrintWriter printer = new PrintWriter(writer);) {
+                printer.print(array.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
         Produto produtoExcluido = buscarProduto(codigo);
         removerProduto(produtoExcluido);
     }
-
 
     public List<String> listarProdutosEstoque() {
         List<String> nomeProdutos = new ArrayList<>();
@@ -666,7 +692,7 @@ public class Estoque implements ArquivosTexto {
         try (FileReader leitorArquivo = new FileReader(caminhoArquivo);
                 BufferedReader buffer = new BufferedReader(leitorArquivo);) {
             String tipo = buffer.readLine();
-            
+
             buffer.readLine(); // codigo do produto
             buffer.readLine(); // quantidade em estoque
 
@@ -695,14 +721,14 @@ public class Estoque implements ArquivosTexto {
 
     public List<String> listarProdutosExcluidos() {
         List<String> nomeProdutos = new ArrayList<>();
-        
+
         File arquivosExcluidos = new File("./src/model/gestaoProdutos/produtosExcluidos");
-        
+
         List<String> nomeArquivos = new ArrayList<>();
         percorrerArquivosEmPasta(arquivosExcluidos, nomeArquivos);
 
         for (String caminhoArquivo : nomeArquivos) {
-            if(caminhoArquivo.contains(".txt")) {
+            if (caminhoArquivo.contains(".txt")) {
                 nomeProdutos.add(obterNomeProdutoTxt(new File(arquivosExcluidos.getPath() + "/" + caminhoArquivo)));
             } else if (caminhoArquivo.contains(".json")) {
                 nomeProdutos.add(obterNomeProdutoJson(new File(arquivosExcluidos.getPath() + "/" + caminhoArquivo)));
@@ -721,10 +747,8 @@ public class Estoque implements ArquivosTexto {
         percorrerArquivosEmPasta(arquivosForaEstoque, nomeArquivos);
 
         for (String caminhoArquivo : nomeArquivos) {
-            try (
-                FileReader leitor = new FileReader(arquivosForaEstoque.getPath() + "/" + caminhoArquivo);
-                BufferedReader buffer = new BufferedReader(leitor);
-            ) {
+            try (FileReader leitor = new FileReader(arquivosForaEstoque.getPath() + "/" + caminhoArquivo);
+                    BufferedReader buffer = new BufferedReader(leitor);) {
                 buffer.readLine(); // Categoria do Produto
                 buffer.readLine(); // Codigo do produto
                 nomeProdutos.add(buffer.readLine()); // Nome do produto
@@ -737,20 +761,20 @@ public class Estoque implements ArquivosTexto {
 
     public List<String> listarLivros() {
         List<String> nomesLivros = new ArrayList<>();
-        
+
         for (Produto produto : getProdutos()) {
-            if(produto.getClass().getSimpleName().equalsIgnoreCase("Livro")) {
+            if (produto.getClass().getSimpleName().equalsIgnoreCase("Livro")) {
                 nomesLivros.add(produto.getNome());
             }
         }
         return nomesLivros;
     }
-    
+
     public List<String> listarHQs() {
         List<String> nomesHQs = new ArrayList<>();
-        
+
         for (Produto produto : getProdutos()) {
-            if(produto.getClass().getSimpleName().equalsIgnoreCase("HQ")) {
+            if (produto.getClass().getSimpleName().equalsIgnoreCase("HQ")) {
                 nomesHQs.add(produto.getNome());
             }
         }
@@ -759,9 +783,9 @@ public class Estoque implements ArquivosTexto {
 
     public List<String> listarBebidas() {
         List<String> nomesBebidas = new ArrayList<>();
-        
+
         for (Produto produto : getProdutos()) {
-            if(produto.getClass().getSimpleName().equalsIgnoreCase("Bebida")) {
+            if (produto.getClass().getSimpleName().equalsIgnoreCase("Bebida")) {
                 nomesBebidas.add(produto.getNome());
             }
         }
@@ -770,9 +794,9 @@ public class Estoque implements ArquivosTexto {
 
     public List<String> listarAcompanhamentos() {
         List<String> nomesAcompanhamentos = new ArrayList<>();
-        
+
         for (Produto produto : getProdutos()) {
-            if(produto.getClass().getSimpleName().equalsIgnoreCase("Bebida")) {
+            if (produto.getClass().getSimpleName().equalsIgnoreCase("Bebida")) {
                 nomesAcompanhamentos.add(produto.getNome());
             }
         }
