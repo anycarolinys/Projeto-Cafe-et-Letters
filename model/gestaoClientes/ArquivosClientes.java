@@ -5,6 +5,32 @@ import java.util.List;
 
 public interface ArquivosClientes {
 
+    /* Instancia clientes a partir da pasta clientesCadastrados
+    * deve ser chamada ao inicializar o programa
+    */
+    public void inicializarClientes();
+    
+    /* Receber um objeto cliente e um booleando pasta
+    * true: instancia cliente na pasta clientesCadastrados
+    * false: instancia cliente na pasta clientesExcluidos
+    */
+    public void cadastrarCliente(Cliente cliente, boolean pasta);
+
+    /* Recebe o CPF do cliente e remove-o tanto da Cliente
+    * bem como remove seu arquivo e move-o para a pasta
+    * clientesExcluidos 
+    */
+    public void excluirCliente(String CPF);
+
+    // Lista os clientes cadastrados
+    public List<String> listarClientesCadastrados();
+    
+    // Lista os clientes excluidos
+    public List<String> listarClientesExcluidos();
+
+    // Recebe o CPF do cliente e lista suas compras já realizadas
+    public List<String> listarComprasClientes(String CPF);
+
     public default void percorrerArquivosEmPasta(File pasta, List<String> arquivosClientes) {
         for (File arquivo : pasta.listFiles()) {
             if (!arquivo.isDirectory()) {
@@ -14,14 +40,4 @@ public interface ArquivosClientes {
             }
         }
     }
-
-    public void instanciarClienteArquivo(String caminhoArquivo);
-
-    public void instanciarClienteObjeto(Cliente cliente, boolean pasta);
-
-    // public File buscarClienteParaExcluir(File caminhoDiretorio, String CPF) throws FileNotFoundException;
-
-    // public boolean excluirCliente(File caminhoArquivo);
-
-    public Cliente buscarCliente(String CPF);
 }

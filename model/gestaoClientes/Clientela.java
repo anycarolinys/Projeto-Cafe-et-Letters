@@ -20,7 +20,7 @@ public class Clientela implements ArquivosClientes {
         this.clientes.add(cliente);
     }
 
-    public void removerCliente(Cliente cliente) {
+    private void removerCliente(Cliente cliente) {
         getClientes().remove(cliente);
     }
 
@@ -36,7 +36,7 @@ public class Clientela implements ArquivosClientes {
         }
     }
 
-    public void instanciarClienteArquivo(String caminhoArquivo) {
+    private void instanciarClienteArquivo(String caminhoArquivo) {
         Cliente cliente = new Cliente();
 
         try (FileReader acessoArquivo = new FileReader(caminhoArquivo);
@@ -51,7 +51,7 @@ public class Clientela implements ArquivosClientes {
         setClientes(cliente);
     }
 
-    public void instanciarClienteObjeto(Cliente cliente, boolean pasta) {
+    public void cadastrarCliente(Cliente cliente, boolean pasta) {
         File diretorioClientes;
         if (pasta == true)
             diretorioClientes = new File("./src/model/gestaoClientes/clientesCadastrados");
@@ -84,7 +84,7 @@ public class Clientela implements ArquivosClientes {
             try (FileReader leitor = new FileReader(arquivo); BufferedReader buffer = new BufferedReader(leitor);) {
                 if (buffer.readLine().equals(CPF)) {
                     clienteExcluido = buscarCliente(CPF);
-                    instanciarClienteObjeto(clienteExcluido, false);
+                    cadastrarCliente(clienteExcluido, false);
                     removerCliente(clienteExcluido);
                     break;
                 }
@@ -95,7 +95,7 @@ public class Clientela implements ArquivosClientes {
         arquivo.delete();
     }
 
-    public Cliente buscarCliente(String CPF) {
+    private Cliente buscarCliente(String CPF) {
 
         for (Cliente cliente : getClientes()) {
             if (cliente.getCPF().equals(CPF))
