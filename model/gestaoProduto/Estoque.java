@@ -16,19 +16,19 @@ public class Estoque implements ArquivosProdutos {
         this.produtosCadastrados = new ArrayList<>();
     }
 
-    public List<Produto> getProdutos() {
+    private List<Produto> getProdutos() {
         return produtos;
     }
 
-    public void setProdutos(Produto produto) {
+    private void setProdutos(Produto produto) {
         this.produtos.add(produto);
     }
 
-    public List<String> getProdutosCadastrados() {
+    private List<String> getProdutosCadastrados() {
         return produtosCadastrados;
     }
 
-    public void setProdutosCadastrados(String nomeProduto) {
+    private void setProdutosCadastrados(String nomeProduto) {
         this.produtosCadastrados.add(nomeProduto);
     }
 
@@ -40,7 +40,6 @@ public class Estoque implements ArquivosProdutos {
         if (!excluirProdutoTexto(new File("./src/model/gestaoProdutos/produtosCadastrados/produtosTxt"), codigo)) {
             excluirProdutoJson(new File("./src/model/gestaoProdutos/produtosCadastrados/produtosJson"), codigo);
         }
-
     }
 
     public Produto buscarProduto(String codigo) {
@@ -75,7 +74,7 @@ public class Estoque implements ArquivosProdutos {
         }
     }
 
-    public void instanciarProdutoTexto(String caminhoArquivo) {
+    private void instanciarProdutoTexto(String caminhoArquivo) {
 
         Livraria produtoLivraria;
         Bebida bebida;
