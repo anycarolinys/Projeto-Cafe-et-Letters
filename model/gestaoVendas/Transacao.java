@@ -15,20 +15,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class Transacao {
+public class Transacao implements ManipulacaoVenda {
 
     public Transacao() {
-    }
-
-    private void percorrerArquivosEmPasta(File pasta, List<String> arquivosDeProdutos) {
-
-        for (File arquivo : pasta.listFiles()) {
-            if (!arquivo.isDirectory()) {
-                arquivosDeProdutos.add(arquivo.getName());
-            } else {
-                percorrerArquivosEmPasta(arquivo, arquivosDeProdutos);
-            }
-        }
     }
 
     public File criarDiretorioCliente(File diretorioCompra, Cliente cliente) {
@@ -37,24 +26,7 @@ public class Transacao {
         return diretorioCliente;
     }
 
-    public File buscarDiretorioCliente(File caminhoDiretorioGeral, Cliente cliente) {
 
-        File[] diretoriosClientes = caminhoDiretorioGeral.listFiles();
-        File pastaCliente = new File("");
-
-        for (File file : diretoriosClientes) {
-            if (file.getName().equals(cliente.getCPF())) {
-                pastaCliente = file;
-                break;
-            }
-        }
-
-        return pastaCliente;
-    }
-
-    // Ao fim do cadastro de uma compra o estoque deve ser atualizado com a função
-    // 'inicializarEstoque()'
-    // da classe Estoque
     public boolean cadastrarCompra(Cliente cliente, Compra compra) {
 
         boolean possuiCompras = cliente.possuiCompras();
