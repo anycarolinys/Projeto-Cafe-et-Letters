@@ -1,0 +1,83 @@
+view/TelaClientesExcluidos.java
+ view.TelaClientesExcluidos
+ view.TelaClientesExcluidos$1
+view/TelaAreaCliente.java
+ view.TelaAreaCliente
+model/gestaoClientes/Clientela.java
+ model.gestaoClientes.Clientela
+model/gestaoVendas/Compra.java
+ model.gestaoVendas.Compra
+model/gestaoProdutos/Livro.java
+ model.gestaoProdutos.Livro
+model/gestaoProdutos/ArquivosTexto.java
+ model.gestaoProdutos.ArquivosTexto
+model/gestaoVendas/ManipulacaoVenda.java
+ model.gestaoVendas.ManipulacaoVenda
+control/Main.java
+ control.Main
+model/gestaoProdutos/HQ.java
+ model.gestaoProdutos.HQ
+view/TelaClientesAtivos.java
+ view.TelaClientesAtivos
+ view.TelaClientesAtivos$1
+view/TelaCadastrarLH.java
+ view.TelaCadastrarLH
+ view.TelaCadastrarLH$1
+model/gestaoProdutos/Produto.java
+ model.gestaoProdutos.Produto
+model/gestaoVendas/Transacao.java
+ model.gestaoVendas.Transacao
+Main.java
+ Main
+view/TelaComprasCliente.java
+ view.TelaComprasCliente
+view/TelaCadastrarVenda.java
+ view.TelaCadastrarVenda
+ view.TelaCadastrarVenda$1
+control/ControlePrincipal.java
+ control.ControlePrincipal
+model/gestaoProdutos/Livraria.java
+ model.gestaoProdutos.Livraria
+model/gestaoProdutos/Bebida.java
+ model.gestaoProdutos.Bebida
+model/gestaoVendas/Venda.java
+ model.gestaoVendas.Venda
+model/gestaoProdutos/Acompanhamento.java
+ model.gestaoProdutos.Acompanhamento
+view/TelaCadastrarCliente.java
+ view.TelaCadastrarCliente
+model/gestaoProdutos/ArquivosProdutos.java
+ model.gestaoProdutos.ArquivosProdutos
+model/gestaoVendas/ConjuntoCompras.java
+ model.gestaoVendas.ConjuntoCompras
+model/gestaoClientes/Cliente.java
+ model.gestaoClientes.Cliente
+control/ControleCliente.java
+ control.ControleCliente
+model/gestaoClientes/ArquivosClientes.java
+ model.gestaoClientes.ArquivosClientes
+model/gestaoProdutos/Estoque.java
+ model.gestaoProdutos.Estoque
+view/TelaExcluirProduto.java
+ view.TelaExcluirProduto
+ view.TelaExcluirProduto$1
+ view.TelaExcluirProduto$2
+view/LH.java
+ view.LH
+ view.LH$1
+ view.LH$2
+view/TelaCadastrarProduto.java
+ view.TelaCadastrarProduto
+ view.TelaCadastrarProduto$1
+control/ControleVendas.java
+ control.ControleVendas
+ control.ControleVendas$1
+control/ControleProdutos.java
+ control.ControleProdutos
+view/TelaEstoque1.java
+ view.TelaEstoque1
+ view.TelaEstoque1$1
+ view.TelaEstoque1$2
+view/TelaAreaInicial.java
+ view.TelaAreaInicial
+ view.TelaAreaInicial$1
