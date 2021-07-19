@@ -1,0 +1,28 @@
+[
+    {
+        "livro": {
+            "codigo": "00020",
+            "qtdEmEstoque": 30,
+            "nome": "Mulheres, raça e classe",
+            "preco": 50,
+            "ISBN": "8575421475",
+            "editora": "Boitempo Editorial",
+            "anoPublicacao": 2016,
+            "genero": "Ciências Sociais",
+            "autor": "Angela Davis"
+        }
+    },
+    {
+        "livro": {
+            "codigo": "00021",
+            "qtdEmEstoque": 30,
+            "nome": "A Guerra dos Tronos",
+            "preco": 50,
+            "ISBN": "8575421476",
+            "editora": "Suma",
+            "anoPublicacao": 2019,
+            "genero": "Fantasia Histórica",
+            "autor": "George R. R. Martin"
+        }
+    }
+]
