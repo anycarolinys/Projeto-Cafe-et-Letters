@@ -1,0 +1,41 @@
+[
+    {
+        "hq": {
+            "codigo": "00017",
+            "qtdEmEstoque": 30,
+            "nome": "Persépolis",
+            "preco": 50,
+            "ISBN": "8575421473",
+            "editora": "Quadrinhos na Cia",
+            "anoPublicacao": 2007,
+            "genero": "Biográfico",
+            "autor": "Marjane Satrapi"
+        }
+    },
+    {
+        "hq": {
+            "codigo": "00018",
+            "qtdEmEstoque": 30,
+            "nome": "Marvel 1602",
+            "preco": 50,
+            "ISBN": "8575421474",
+            "editora": "Panini",
+            "anoPublicacao": 2017,
+            "genero": "Super-heróis",
+            "autor": "Neil Gaimann"
+        }
+    },
+    {
+        "hq": {
+            "codigo": "00019",
+            "qtdEmEstoque": 30,
+            "nome": "Duna",
+            "preco": 50,
+            "ISBN": "8575421475",
+            "editora": "Intrínseca",
+            "anoPublicacao": 2021,
+            "genero": "Ficção Científica",
+            "autor": "Frank Herbert"
+        }
+    }
+]

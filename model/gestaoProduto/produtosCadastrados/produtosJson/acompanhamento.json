@@ -1,0 +1,18 @@
+[
+    {
+        "acompanhamento": {
+            "codigo": "00013",
+            "qtdEmEstoque": 30,
+            "nome": "Brownie",
+            "preco": 4
+        }
+    },
+    {
+        "acompanhamento": {
+            "codigo": "00014",
+            "qtdEmEstoque": 30,
+            "nome": "Cupcake",
+            "preco": 4
+        }
+    }
+]
