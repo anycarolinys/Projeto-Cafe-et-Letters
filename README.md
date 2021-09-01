@@ -25,7 +25,7 @@ Produtos: livros, alimentícios (bebidas e acompanhamentos)
 • Listar compras de um determinado cliente  
 
 ### Ferramentas de implementação:
-Linguagem Java  
+Linguagem: Java  
 IDEs: Netbeans, Eclipse, VSCode  
 Padrão de projeto: Modelo-Visão-Controle (MVC)  
 
